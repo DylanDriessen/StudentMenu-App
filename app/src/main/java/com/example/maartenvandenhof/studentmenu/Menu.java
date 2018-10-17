@@ -4,14 +4,15 @@ import java.util.ArrayList;
 
 public class Menu {
     private String name;
-    private ArrayList<Ingredient> ingredient;
+    private ArrayList<Ingredient> ingredients;
     private double price;
 
-    public Menu(String name, ArrayList<Ingredient> ingredient, double price) {
+    public Menu(String name, ArrayList<Ingredient> ingredients, double price) {
         this.name = name;
-        this.ingredient = ingredient;
+        this.ingredients = ingredients;
         this.price = price;
     }
+
 
     public String getName() {
         return name;
@@ -22,15 +23,20 @@ public class Menu {
     }
 
     public ArrayList<Ingredient> getIngredient() {
-        return ingredient;
+        return ingredients;
     }
 
-    public void setIngredient(ArrayList<Ingredient> ingredient) {
-        this.ingredient = ingredient;
+    public void setIngredient(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPrice(){
+        if (this.price == 0){
+            for(Ingredient i : ingredients){
+                this.price = price + i.getPrice();
+            }
+        }
+        return this.price;
     }
 
     public void setPrice(double price) {
