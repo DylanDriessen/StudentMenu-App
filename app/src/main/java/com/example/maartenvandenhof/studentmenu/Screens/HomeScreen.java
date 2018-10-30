@@ -1,5 +1,6 @@
 package com.example.maartenvandenhof.studentmenu.Screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,6 +20,14 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        /*Button btn = findViewById(R.id.searchMenuButton);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeScreen.this,MenuListScreen.class));
+            }
+        });*/
     }
 
     @Override
@@ -43,6 +52,7 @@ public class HomeScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Button btn = (Button)findViewById(R.menu.drawermenu.);
+
+
 
 }
