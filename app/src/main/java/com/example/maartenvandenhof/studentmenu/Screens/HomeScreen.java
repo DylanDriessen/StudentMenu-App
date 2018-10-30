@@ -1,4 +1,4 @@
-package com.example.maartenvandenhof.studentmenu;
+package com.example.maartenvandenhof.studentmenu.Screens;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.maartenvandenhof.studentmenu.R;
 
 public class HomeScreen extends AppCompatActivity {
 
