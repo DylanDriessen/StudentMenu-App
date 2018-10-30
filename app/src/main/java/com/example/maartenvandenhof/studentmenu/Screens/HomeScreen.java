@@ -11,16 +11,17 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import res.layout.*;
 
 import com.example.maartenvandenhof.studentmenu.R;
 
 public class HomeScreen extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         /*Button btn = findViewById(R.id.searchMenuButton);
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,8 +52,6 @@ public class HomeScreen extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
 }
