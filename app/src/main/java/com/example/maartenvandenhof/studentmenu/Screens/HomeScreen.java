@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,10 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import res.layout.*;
-
+import android.widget.Toast;
 import com.example.maartenvandenhof.studentmenu.R;
 
 public class HomeScreen extends AppCompatActivity {
+
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +31,33 @@ public class HomeScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeScreen.this,MenuListScreen.class));
+                Toast toast = Toast.makeText(getApplicationContext(), "Dit is een test", Toast.LENGTH_LONG);
+                                toast.show();
             }
         });*/
+
+        mDrawerLayout = findViewById(R.id.homeScreen);
+
+        NavigationView navigationView = findViewById(R.id.navigationSlider);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        switch (menuItem.getItemId()){
+                            case R.id.ml:
+                                Toast toast = Toast.makeText(getApplicationContext(), "Dit is een test", Toast.LENGTH_LONG);
+                                toast.show();
+                                startActivity(new Intent(HomeScreen.this,MenuListScreen.class));
+                        }
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        startActivity(new Intent(HomeScreen.this,MenuListScreen.class));
+
+                        return true;
+                    }
+                });
     }
 
     @Override
@@ -52,6 +81,4 @@ public class HomeScreen extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }
