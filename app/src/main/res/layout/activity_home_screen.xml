@@ -4,48 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Screens.HomeScreen"
-    android:orientation="vertical">
+    tools:context=".Activities.MainActivity"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:openDrawer="start"
+    android:id="@+id/drawer_layout">
 
-            <android.support.design.widget.NavigationView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:itemTextColor="@android:color/darker_gray"
-                app:itemIconTint="@android:color/darker_gray"
-                app:menu="@menu/drawermenu"
-                android:layout_gravity="start"
-                android:id="@+id/navigationSlider">
-            </android.support.design.widget.NavigationView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FC913A"
         android:orientation="vertical">
 
-        <TextView
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="97dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center_horizontal"
-            android:text="Hi there! \n Welcome at studentMenu \n Please enter your budget"
-            android:textColor="@android:color/white"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/toolbar"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:elevation="4dp"
+            app:titleTextColor="#FFF" />
 
-        <SearchView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"></SearchView>
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_container"/>
 
-        <Button
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="#FF4E50"
-            android:onClick="searchMenu"
-            android:text="@string/search_menu"
-            android:textColor="@android:color/white" />
+
     </LinearLayout>
+
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:itemTextColor="@android:color/darker_gray"
+        app:itemIconTint="@android:color/darker_gray"
+        app:menu="@menu/drawermenu"
+        app:headerLayout="@layout/nav_header"
+        android:layout_gravity="start"
+        android:id="@+id/navigationSlider">
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

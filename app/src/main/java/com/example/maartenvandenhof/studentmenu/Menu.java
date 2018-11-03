@@ -5,12 +5,18 @@ import java.util.ArrayList;
 public class Menu {
     private String name;
     private ArrayList<Ingredient> ingredients;
-    private double price;
+    private double price = 0;
 
     public Menu(String name, ArrayList<Ingredient> ingredients, double price) {
         this.name = name;
         this.ingredients = ingredients;
         this.price = price;
+    }
+
+    public Menu(String name, ArrayList<Ingredient> ingredients) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.price = getPrice();
     }
 
 
