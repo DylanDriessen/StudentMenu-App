@@ -14,6 +14,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
+    public ArrayList<Ingredient> ingredientList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +43,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         menuList = new ArrayList<>();
+        ingredientList = new ArrayList<>();
 
         //Dummy menu's aanmaken
-        Ingredient wortel = new Ingredient("wortel", 5);
-        Ingredient selder = new Ingredient("selder", 1);
-        Ingredient patat = new Ingredient("patat", 6);
-        Ingredient sla = new Ingredient("sla", 3);
+        Ingredient wortel = new Ingredient("wortel", 5, "Komt van onder de grond, is ne plant");
+        Ingredient selder = new Ingredient("selder", 1, "Kunt ge soep van maken");
+        Ingredient patat = new Ingredient("patat", 6, "Perfect voor puree");
+        Ingredient sla = new Ingredient("sla", 3, "Alleen voor konijnen");
 
         ArrayList<Ingredient> ingredients1 = new ArrayList<>();
         ArrayList<Ingredient> ingredients2 = new ArrayList<>();
+        ingredientList.add(wortel);
+        ingredientList.add(selder);
+        ingredientList.add(patat);
+        ingredientList.add(sla);
 
         ingredients1.add(wortel);
         ingredients1.add(patat);
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeScreenFragment()).commit();
                 break;
             case R.id.il:
-                notImplemented.show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
                 break;
             case R.id.share:
                 notImplemented.show();

@@ -3,12 +3,17 @@ package com.example.maartenvandenhof.studentmenu;
 public class Ingredient {
     private String name;
     private double price;
+    private String description;
 
     public Ingredient(String name, double price) {
         this.name = name;
         this.price = price;
     }
-
+    public Ingredient(String name, double price, String description) {
+        this.name = name;
+        this.price = price;
+        setDescription(description);
+    }
     public String getName() {
         return name;
     }
@@ -23,5 +28,13 @@ public class Ingredient {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

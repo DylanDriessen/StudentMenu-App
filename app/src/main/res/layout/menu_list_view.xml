@@ -18,7 +18,6 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/back"
             android:gravity="center_vertical"
             android:text="Menu Titel"
             android:textColor="#000"
