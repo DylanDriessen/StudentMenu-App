@@ -58,24 +58,24 @@
 
     <TextView
         android:id="@+id/ingredientDescription"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
         android:layout_marginTop="52dp"
         android:layout_marginBottom="12dp"
         android:text="Description"
-        android:textColor="#cecece"
-        android:textSize="20sp"
+        android:textColor="#eaeaea"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintHorizontal_bias="0.141"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.065" />
 
     <TextView
         android:id="@+id/ingredientPrice"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="29dp"
         android:layout_gravity="center"
         android:text="Price"
@@ -83,9 +83,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintHorizontal_bias="0.141"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.907" />
+        app:layout_constraintVertical_bias="0.886" />
 
 </android.support.constraint.ConstraintLayout>
