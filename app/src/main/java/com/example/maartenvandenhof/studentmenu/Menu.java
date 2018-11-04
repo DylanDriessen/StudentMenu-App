@@ -5,9 +5,13 @@ import java.util.ArrayList;
 public class Menu {
     private String name;
     private ArrayList<Ingredient> ingredients;
+    private String description;
     private double price = 0;
 
+
+
     public Menu(String name, ArrayList<Ingredient> ingredients, double price) {
+
         this.name = name;
         this.ingredients = ingredients;
         this.price = price;
@@ -34,6 +38,14 @@ public class Menu {
 
     public void setIngredient(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getPrice(){

@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Dummy menu's aanmaken
         Ingredient wortel = new Ingredient("wortel", 5);
-        Ingredient selder = new Ingredient("selder", 5);
-        Ingredient patat = new Ingredient("patat", 5);
-        Ingredient sla = new Ingredient("sla", 5);
+        Ingredient selder = new Ingredient("selder", 1);
+        Ingredient patat = new Ingredient("patat", 6);
+        Ingredient sla = new Ingredient("sla", 3);
 
         ArrayList<Ingredient> ingredients1 = new ArrayList<>();
         ArrayList<Ingredient> ingredients2 = new ArrayList<>();
@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Menu menu1 = new Menu("Patat me wortelen", ingredients1);
         Menu menu2 = new Menu("Selder me sla", ingredients2);
+        menu1.setDescription("Wa wortelen me een paar goeie patatten, kan ni slecht zijn");
+        menu2.setDescription("Selder en sla zijn fucking gezond, gewoon eten");
 
         menuList.add(menu1);
         menuList.add(menu2);
@@ -103,11 +105,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public ArrayList<String> getMenuNamesList(){
-        ArrayList<String> menuNames = new ArrayList<>();
-        for(Menu m : menuList){
-            menuNames.add(m.getName());
-        }
-        return menuNames;
+    public ArrayList<Menu> getMenuList(){
+
+        return menuList;
     }
 }
