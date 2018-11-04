@@ -9,11 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
+import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -109,5 +113,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> getMenuList(){
 
         return menuList;
+    }
+
+    public void searchMenuPrice(View v){
+        SearchView priceSearch = findViewById(R.id.searchPriceField);
+        String text = "Please fill in a number";
+
+        if (priceSearch.getQuery() != null){
+            CharSequence query = priceSearch.getQuery();
+            String temp = query.toString();
+            try{
+                double price = Double.parseDouble(temp);
+                MenuPriceSearchFragment fragment = new MenuPriceSearchFragment();
+
+                Bundle args = new Bundle();
+                args.putDouble("price", price);
+                fragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+            } catch (NumberFormatException e){
+                Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+                t.show();
+            }
+
+        }
+
     }
 }

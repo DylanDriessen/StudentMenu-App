@@ -27,14 +27,16 @@
         <SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"></SearchView>
+            android:id="@+id/searchPriceField"
+            android:layout_marginBottom="20dp" />
+
 
         <Button
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="#FF4E50"
-            android:onClick="menuList"
+            android:onClick="searchMenuPrice"
             android:text="@string/search_menu"
             android:textColor="@android:color/white" />
     </LinearLayout>
