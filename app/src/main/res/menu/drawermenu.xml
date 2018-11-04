@@ -8,11 +8,14 @@
         <item android:id="@+id/il" android:title="Ingredient List"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Suggestions">
         <menu>
             <item
-                android:title="Share"
-                android:id="@+id/share"/>
+                android:title="Menu"
+                android:id="@+id/sMenu"/>
+            <item
+                android:title="Ingredient"
+                android:id="@+id/sIngredient"/>
         </menu>
     </item>
 </menu>

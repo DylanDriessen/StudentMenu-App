@@ -6,38 +6,61 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FC913A"
+        android:background="#FFF"
         android:orientation="vertical">
 
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="97dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center_horizontal"
-            android:text="Hi there! \n Welcome at studentMenu \n Please enter your budget"
-            android:textColor="@android:color/white"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            android:layout_height="200dp"
+            android:background="#00aeff">
 
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchPriceField"
-            android:layout_marginBottom="20dp" />
+        </LinearLayout>
+        <android.support.v7.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
+            android:background="#00aeff">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:text="Fill in your budget"
+                    android:textColor="#00aeff"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+                <SearchView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchPriceField"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@drawable/back"
+                    android:tooltipText="Budget"/>
 
 
-        <Button
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="#FF4E50"
-            android:onClick="searchMenuPrice"
-            android:text="@string/search_menu"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+                <Button
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#00aeff"
+                    android:onClick="searchMenuPrice"
+                    android:text="@string/search_menu"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 </RelativeLayout>

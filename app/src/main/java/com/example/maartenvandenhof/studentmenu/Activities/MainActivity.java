@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ingredientList = new ArrayList<>();
 
         //Dummy menu's aanmaken
-        Ingredient wortel = new Ingredient("wortel", 5, "Komt van onder de grond, is ne plant");
-        Ingredient selder = new Ingredient("selder", 1, "Kunt ge soep van maken");
-        Ingredient patat = new Ingredient("patat", 6, "Perfect voor puree");
-        Ingredient sla = new Ingredient("sla", 3, "Alleen voor konijnen");
+        Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
+        Ingredient selder = new Ingredient("Selder", 1, "Kunt ge soep van maken.");
+        Ingredient patat = new Ingredient("Patat", 6, "Perfect voor puree.");
+        Ingredient sla = new Ingredient("Sla", 3, "Alleen voor konijnen.");
 
         ArrayList<Ingredient> ingredients1 = new ArrayList<>();
         ArrayList<Ingredient> ingredients2 = new ArrayList<>();
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-
+    //Menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Toast notImplemented = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG);
@@ -108,7 +108,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.il:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
                 break;
-            case R.id.share:
+            case R.id.sMenu:
+                notImplemented.show();
+                break;
+            case R.id.sIngredient:
                 notImplemented.show();
                 break;
         }
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return menuList;
     }
 
+    //Search Menu Button
     public void searchMenuPrice(View v){
         SearchView priceSearch = findViewById(R.id.searchPriceField);
         String text = "Please fill in a number";
