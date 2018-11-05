@@ -5,8 +5,9 @@
     android:layout_height="170dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#00aeff"
-    android:paddingBottom="2dp">
+    android:background="#0091d4"
+    android:paddingBottom="2dp"
+    android:layout_margin="0dp">
 
 
     <ImageView
@@ -19,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/plate_of_food"
+        app:srcCompat="@drawable/wortel"
         android:scaleType="centerCrop"/>
 
     <ImageView
@@ -36,26 +37,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"/>
 
-        <TextView
-            android:id="@+id/menuListViewText"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical"
-            android:text="Ingredient Name"
-            android:textColor="#FFF"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.19"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/ingredientName"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:gravity="center_vertical"
+        android:text="Ingredient Name"
+        android:textColor="#FFF"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.19"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <TextView
-        android:id="@+id/menuDescription"
+        android:id="@+id/ingredientDescription"
         android:layout_width="250dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
@@ -72,7 +74,8 @@
         app:layout_constraintVertical_bias="0.065" />
 
     <TextView
-        android:layout_width="300dp"
+        android:id="@+id/ingredientPrice"
+        android:layout_width="250dp"
         android:layout_height="29dp"
         android:layout_gravity="center"
         android:text="Price"
@@ -80,10 +83,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintHorizontal_bias="0.141"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.907"
-        android:id="@+id/menuPrice"/>
+        app:layout_constraintVertical_bias="0.886" />
 
 </android.support.constraint.ConstraintLayout>
