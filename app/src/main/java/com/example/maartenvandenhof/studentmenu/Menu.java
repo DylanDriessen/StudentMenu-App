@@ -6,15 +6,24 @@ public class Menu {
     private String name;
     private ArrayList<Ingredient> ingredients;
     private String description;
+    private String recipe;
     private double price = 0;
 
 
+    public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe) {
+
+        this.name = name;
+        this.ingredients = ingredients;
+        this.price = price;
+        setRecipe(recipe);
+    }
 
     public Menu(String name, ArrayList<Ingredient> ingredients, double price) {
 
         this.name = name;
         this.ingredients = ingredients;
         this.price = price;
+        setRecipe("N/A");
     }
 
     public Menu(String name, ArrayList<Ingredient> ingredients) {
@@ -59,5 +68,13 @@ public class Menu {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(String recipe) {
+        this.recipe = recipe;
     }
 }
