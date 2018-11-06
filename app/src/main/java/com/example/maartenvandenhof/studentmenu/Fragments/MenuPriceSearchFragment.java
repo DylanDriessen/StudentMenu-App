@@ -29,7 +29,7 @@ public class MenuPriceSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
         RecyclerView lv = view.findViewById(R.id.menuList);
 
-        ArrayList<Menu> menuList = ((MainActivity)getActivity()).getMenuList();
+        ArrayList<Menu> menuList = ((MainActivity)getActivity()).menuList;
         ArrayList<Menu> adjustedList = new ArrayList<>();
         double price = getArguments().getDouble("price");
 

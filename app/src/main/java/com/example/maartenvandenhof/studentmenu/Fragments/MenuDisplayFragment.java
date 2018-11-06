@@ -9,23 +9,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Adapter.MenuAdapter;
 import com.example.maartenvandenhof.studentmenu.R;
 
+import org.w3c.dom.Text;
 
-public class MenuListFragment extends Fragment {
+public class MenuDisplayFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
-        RecyclerView lv = (RecyclerView)view.findViewById(R.id.menuList);
-
-        MenuAdapter adapter = new MenuAdapter(getContext(), ((MainActivity)getActivity()).menuList);
-        lv.setAdapter(adapter);
-        lv.setLayoutManager(new LinearLayoutManager(getContext()));
+        View view = inflater.inflate(R.layout.fragment_menu_display, container, false);
+        TextView title = view.findViewById(R.id.menuDisplayTitle);
+        String menuTitle = (String)getArguments().get("MenuTitle");
+        title.setText(menuTitle);
         return view;
+
     }
 }

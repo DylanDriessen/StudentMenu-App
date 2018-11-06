@@ -11,10 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.MenuDisplayFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
+    private Menu selectedMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public ArrayList<Menu> getMenuList(){
-
-        return menuList;
-    }
-
     //Search Menu Button
     public void searchMenuPrice(View v){
         SearchView priceSearch = findViewById(R.id.searchPriceField);
@@ -147,8 +145,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
                 t.show();
             }
-
         }
+    }
 
+    public void menuDescription(String menuTitle){
+        MenuDisplayFragment fragment = new MenuDisplayFragment();
+        Bundle args = new Bundle();
+        args.putString("MenuTitle", menuTitle);
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 }

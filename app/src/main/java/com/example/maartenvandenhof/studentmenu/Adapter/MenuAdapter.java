@@ -2,21 +2,26 @@ package com.example.maartenvandenhof.studentmenu.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Menu;
 import com.example.maartenvandenhof.studentmenu.R;
 
 import java.util.List;
 
-public class MenuAdapter extends RecyclerView.Adapter {
+public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickListener {
 
     Context myContext;
     List<Menu> menuData;
+
+
 
 
     public MenuAdapter(Context myContext, List<Menu> menuData){
@@ -48,6 +53,12 @@ public class MenuAdapter extends RecyclerView.Adapter {
         return menuData.size();
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
+
+
     public class myViewHolder extends RecyclerView.ViewHolder{
 
         TextView menuTitle, menuDescription, menuPrice;
@@ -58,6 +69,11 @@ public class MenuAdapter extends RecyclerView.Adapter {
             menuTitle = itemView.findViewById(R.id.menuListViewText);
             menuDescription = itemView.findViewById(R.id.menuDescription);
             menuPrice = itemView.findViewById(R.id.menuPrice);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v){
+                    ((MainActivity)myContext).menuDescription(menuTitle.getText().toString());
+                }
+            });
         }
     }
 }
