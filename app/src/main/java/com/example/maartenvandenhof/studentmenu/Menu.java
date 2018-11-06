@@ -30,6 +30,11 @@ public class Menu {
         this.name = name;
         this.ingredients = ingredients;
         this.price = getPrice();
+        setRecipe("N/A");
+    }
+
+    public Menu(){
+        setRecipe("N/A");
     }
 
 

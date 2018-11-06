@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
         ((myViewHolder) viewHolder).menuTitle.setText(menuData.get(i).getName());
         ((myViewHolder) viewHolder).menuDescription.setText(menuData.get(i).getDescription());
         ((myViewHolder) viewHolder).menuPrice.setText("€" +  menuData.get(i).getPrice());
-
+        ((myViewHolder) viewHolder).itemMenu = menuData.get(i);
     }
 
     @Override
@@ -62,16 +63,21 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
     public class myViewHolder extends RecyclerView.ViewHolder{
 
         TextView menuTitle, menuDescription, menuPrice;
-
+        Menu itemMenu = new Menu();
 
         public myViewHolder(View itemView){
             super(itemView);
+
+
             menuTitle = itemView.findViewById(R.id.menuListViewText);
             menuDescription = itemView.findViewById(R.id.menuDescription);
             menuPrice = itemView.findViewById(R.id.menuPrice);
+
+
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v){
-                    ((MainActivity)myContext).menuDescription(menuTitle.getText().toString(), menuPrice.getText().toString());
+                    ((MainActivity)myContext).menuDescription(menuTitle.getText().toString(), menuPrice.getText().toString(), itemMenu.getRecipe());
                 }
             });
         }

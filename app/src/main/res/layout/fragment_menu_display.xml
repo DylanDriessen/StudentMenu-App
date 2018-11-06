@@ -70,7 +70,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/receptText"
+            android:id="@+id/recipeText"
             android:layout_width="350dp"
             android:layout_height="match_parent"
             android:text="@string/lorem_ipsum"
