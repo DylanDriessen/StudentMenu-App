@@ -37,16 +37,32 @@
         <TextView
             android:id="@+id/menuDisplayTitle"
             android:layout_width="300dp"
-            android:layout_height="86dp"
+            android:layout_height="46dp"
+            android:gravity="center_vertical"
             android:text="@string/app_name"
             android:textColor="#FFF"
             android:textSize="35sp"
-            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.129" />
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="41dp"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:id="@+id/menuDisplayPrice"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.898" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout

@@ -25,7 +25,10 @@ public class MenuDisplayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_display, container, false);
         TextView title = view.findViewById(R.id.menuDisplayTitle);
+        TextView price = view.findViewById(R.id.menuDisplayPrice);
         String menuTitle = (String)getArguments().get("MenuTitle");
+        String menuPrice = (String)getArguments().get("MenuPrice");
+        price.setText(menuPrice);
         title.setText(menuTitle);
         return view;
 

@@ -148,10 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void menuDescription(String menuTitle){
+    public void menuDescription(String menuTitle, String menuPrice){
         MenuDisplayFragment fragment = new MenuDisplayFragment();
         Bundle args = new Bundle();
         args.putString("MenuTitle", menuTitle);
+        args.putString("MenuPrice", menuPrice);
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }

@@ -71,7 +71,7 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
             menuPrice = itemView.findViewById(R.id.menuPrice);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v){
-                    ((MainActivity)myContext).menuDescription(menuTitle.getText().toString());
+                    ((MainActivity)myContext).menuDescription(menuTitle.getText().toString(), menuPrice.getText().toString());
                 }
             });
         }
