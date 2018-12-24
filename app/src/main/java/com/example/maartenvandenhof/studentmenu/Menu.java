@@ -50,6 +50,13 @@ public class Menu {
         return ingredients;
     }
 
+    public ArrayList<String> getIngredientsString(){
+        ArrayList<String> list = new ArrayList<>();
+        for(Ingredient i:ingredients){
+            list.add(i.getName());
+        }
+        return list;
+    }
     public void setIngredient(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }

@@ -1,6 +1,7 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -148,12 +149,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void menuDescription(String menuTitle, String menuPrice, String menuRecipe){
+    public void menuDescription(String menuTitle, String menuPrice, String menuRecipe, ArrayList<String> ingredientList){
         MenuDisplayFragment fragment = new MenuDisplayFragment();
         Bundle args = new Bundle();
         args.putString("MenuTitle", menuTitle);
         args.putString("MenuPrice", menuPrice);
         args.putString("MenuRecipe", menuRecipe);
+        args.putStringArrayList("IngredientList", ingredientList);
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }

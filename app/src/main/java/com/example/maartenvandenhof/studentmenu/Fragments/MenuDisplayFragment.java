@@ -14,9 +14,12 @@ import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Adapter.MenuAdapter;
+import com.example.maartenvandenhof.studentmenu.Adapter.MenuIngredientListAdaptor;
 import com.example.maartenvandenhof.studentmenu.R;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class MenuDisplayFragment extends Fragment {
 
@@ -27,12 +30,18 @@ public class MenuDisplayFragment extends Fragment {
         TextView title = view.findViewById(R.id.menuDisplayTitle);
         TextView price = view.findViewById(R.id.menuDisplayPrice);
         TextView recipe = view.findViewById(R.id.recipeText);
+        RecyclerView ingredientList = view.findViewById(R.id.menuIngredientRecycler);
+
         String menuTitle = (String)getArguments().get("MenuTitle");
         String menuPrice = (String)getArguments().get("MenuPrice");
         String menuRecipe = (String)getArguments().get("MenuRecipe");
+
         price.setText(menuPrice);
         title.setText(menuTitle);
         recipe.setText(menuRecipe);
+        MenuIngredientListAdaptor ingredientListAdaptor = new MenuIngredientListAdaptor(getContext(), (ArrayList<String>) getArguments().get("IngredientList"));
+        ingredientList.setAdapter(ingredientListAdaptor);
+        ingredientList.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
 
     }
