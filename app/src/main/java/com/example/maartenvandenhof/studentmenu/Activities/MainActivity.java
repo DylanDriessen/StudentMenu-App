@@ -171,19 +171,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         EditText name = findViewById(R.id.addIngredientName);
         EditText price = findViewById(R.id.addIngredientPrice);
         EditText desc = findViewById(R.id.addIngredientDescription);
-        String text = "Please fill in a number for price";
 
-        if (name.getText() != null && price.getText() != null && desc.getText() != null){
+        if (!name.getText().toString().isEmpty() && !price.getText().toString().isEmpty() && !desc.getText().toString().isEmpty()){
             try{
                 double priceDouble = Double.parseDouble(price.getText().toString());
 
+                //Make ingredient
                 Ingredient i = new Ingredient(name.getText().toString(), priceDouble, desc.getText().toString());
-                ingredientList.add(i);
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
+                //Check if it already exists
+                boolean exists = false;
+                for (Ingredient in:ingredientList){
+                    if (in.getName().equals(name.getText().toString().trim())){
+                        exists = true;
+                    }
+                }
+
+                //Add Ingredient
+                if (!exists){
+                    ingredientList.add(i);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
+                } else {
+                    Toast t = Toast.makeText(this, "Ingredient already exists", Toast.LENGTH_SHORT);
+                    t.show();
+                }
+
+
 
             } catch (NumberFormatException e){
-                Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(this, "Please fill in a number for price", Toast.LENGTH_SHORT);
                 t.show();
             }
         } else {
