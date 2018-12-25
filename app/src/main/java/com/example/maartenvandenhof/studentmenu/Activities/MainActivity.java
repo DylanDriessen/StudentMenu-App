@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragmentRecipeFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuDisplayFragment;
@@ -264,7 +265,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
                 menuList.add(m);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
+                Bundle args = new Bundle();
+                args.putString("menuTitle", m.getName());
+                GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
+                fragmentRecipe.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).commit();
         }
+    }
+
+    public void addMenuWithDescription(View v){
+        EditText recipe = findViewById(R.id.addMenuRecipe);
+        TextView menuTitle = findViewById(R.id.addMenuTitle);
+
+        for (Menu m:menuList){
+            if (m.getName().equals(menuTitle.getText().toString())){
+                m.setRecipe(recipe.getText().toString());
+            }
+        }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
     }
 }

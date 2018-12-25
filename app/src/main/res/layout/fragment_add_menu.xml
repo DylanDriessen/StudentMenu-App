@@ -102,7 +102,7 @@
                 android:layout_height="50dp"
                 android:background="@color/colorPrimary"
                 android:onClick="addMenu"
-                android:text="@string/add"
+                android:text="@string/next"
                 android:textColor="#FFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
