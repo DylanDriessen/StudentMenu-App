@@ -26,6 +26,14 @@ public class Menu {
         setRecipe("N/A");
     }
 
+    public Menu(String name, ArrayList<Ingredient> ingredients, String description) {
+
+        this.name = name;
+        this.ingredients = ingredients;
+        this.description = description;
+        setRecipe("N/A");
+    }
+
     public Menu(String name, ArrayList<Ingredient> ingredients) {
         this.name = name;
         this.ingredients = ingredients;

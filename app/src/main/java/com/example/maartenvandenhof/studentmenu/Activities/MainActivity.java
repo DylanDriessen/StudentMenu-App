@@ -10,10 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuDisplayFragment;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "Main Activity";
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
@@ -151,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //Show Menu description
     public void menuDescription(String menuTitle, String menuPrice, String menuRecipe, ArrayList<String> ingredientList){
         MenuDisplayFragment fragment = new MenuDisplayFragment();
         Bundle args = new Bundle();
@@ -162,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
-    //Add Ingredient Button
+    //Add Ingredient
     public void goToAddIngredient(View v){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoToAddIngredientFragment()).commit();
     }
@@ -195,9 +200,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast t = Toast.makeText(this, "Ingredient already exists", Toast.LENGTH_SHORT);
                     t.show();
                 }
-
-
-
             } catch (NumberFormatException e){
                 Toast t = Toast.makeText(this, "Please fill in a number for price", Toast.LENGTH_SHORT);
                 t.show();
@@ -205,6 +207,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Toast t = Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT);
             t.show();
+        }
+    }
+
+    //Add Menu
+    public void goToAddMenu(View v){
+        Bundle args = new Bundle();
+        ArrayList<String> ingredientNames = new ArrayList<>();
+        for (Ingredient i:ingredientList){
+            ingredientNames.add(i.getName());
+        }
+        args.putStringArrayList("IngredientList", ingredientNames);
+        GoToAddMenuFragment fragment = new GoToAddMenuFragment();
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+    }
+
+    public void addMenu(View v){
+        EditText name = findViewById(R.id.addMenuName);
+        EditText desc = findViewById(R.id.addMenuDescription);
+        LinearLayout ingredients = findViewById(R.id.addIngredientToMenu);
+
+        if (!name.getText().toString().isEmpty() && !desc.getText().toString().isEmpty()){
+
+                ArrayList<Ingredient> ingredientMenuList = new ArrayList<>();
+                ArrayList<String> names = new ArrayList<>();
+                ArrayList<Integer> priceList = new ArrayList<>();
+
+                for( int i = 0; i < ingredients.getChildCount(); i++) {
+                    if (ingredients.getChildAt(i) instanceof TextView) {
+                        if (i%2==0){
+                            priceList.add(Integer.parseInt(((TextView) ingredients.getChildAt(i)).getText().toString()));
+                        } else {
+                            names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
+                        }
+                    }
+                }
+
+
+                for (int i = 0; i<names.size(); i++){
+                    boolean exists = false;
+                    Ingredient existing = null;
+                    Ingredient newIng = new Ingredient(names.get(i), priceList.get(i));
+                    for (Ingredient ing:ingredientList){
+                        if (ing.getName().equals(newIng.getName())){
+                            exists = true;
+                            existing = ing;
+                        }
+                    }
+                    if (!exists){
+                        ingredientMenuList.add(newIng);
+                    } else {
+                        ingredientMenuList.add(existing);
+                    }
+                }
+
+                Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
+                menuList.add(m);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
         }
     }
 }
