@@ -41,7 +41,7 @@ public class MenuDisplayFragment extends Fragment {
         recipe.setText(menuRecipe);
         MenuIngredientListAdaptor ingredientListAdaptor = new MenuIngredientListAdaptor(getContext(), (ArrayList<String>) getArguments().get("IngredientList"));
         ingredientList.setAdapter(ingredientListAdaptor);
-        ingredientList.setLayoutManager(new LinearLayoutManager(getContext()));
+        ingredientList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         return view;
 
     }

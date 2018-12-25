@@ -72,19 +72,20 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menuIngredientRecycler"
             android:layout_width="350dp"
-            android:layout_height="70dp"
+            android:layout_height="41dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="0.028">
 
         </android.support.v7.widget.RecyclerView>
 
         <TextView
             android:id="@+id/recipeText"
             android:layout_width="350dp"
-            android:layout_height="333dp"
+            android:layout_height="356dp"
             android:layout_marginTop="10dp"
             android:text="@string/lorem_ipsum"
             android:textSize="20sp"
@@ -93,7 +94,7 @@
             app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.882" />
+            app:layout_constraintVertical_bias="0.933" />
 
     </android.support.constraint.ConstraintLayout>
 </LinearLayout>
