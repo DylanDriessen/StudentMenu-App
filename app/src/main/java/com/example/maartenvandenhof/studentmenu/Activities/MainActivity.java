@@ -227,7 +227,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addMenu(View v){
         EditText name = findViewById(R.id.addMenuName);
         EditText desc = findViewById(R.id.addMenuDescription);
-        LinearLayout ingredients = findViewById(R.id.addIngredientToMenu);
+        LinearLayout ingredients = findViewById(R.id.addMenuIngredientColunm);
+        LinearLayout ingredientsPrices = findViewById(R.id.addMenuPriceColunm);
 
         if (!name.getText().toString().isEmpty() && !desc.getText().toString().isEmpty()){
 
@@ -237,11 +238,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 for( int i = 0; i < ingredients.getChildCount(); i++) {
                     if (ingredients.getChildAt(i) instanceof TextView) {
-                        if (i%2==0){
-                            priceList.add(Integer.parseInt(((TextView) ingredients.getChildAt(i)).getText().toString()));
-                        } else {
+                            priceList.add(Integer.parseInt(((TextView) ingredientsPrices.getChildAt(i)).getText().toString()));
                             names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
-                        }
                     }
                 }
 
