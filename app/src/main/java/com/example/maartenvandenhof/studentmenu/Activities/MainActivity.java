@@ -103,8 +103,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
+        } else {
+            getSupportFragmentManager().popBackStack();
         }
-        super.onBackPressed();
     }
 
 
@@ -127,13 +128,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast notImplemented = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG);
         switch (menuItem.getItemId()) {
             case R.id.ml:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.db:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeScreenFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeScreenFragment()).addToBackStack(null).commit();
                 break;
             case R.id.il:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.sMenu:
                 notImplemented.show();
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 args.putDouble("price", price);
                 fragment.setArguments(args);
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
             } catch (NumberFormatException e){
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
@@ -181,12 +182,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         args.putString("MenuRecipe", menuRecipe);
         args.putStringArrayList("IngredientList", ingredientList);
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 
     //Add Ingredient
     public void goToAddIngredient(View v){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoToAddIngredientFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoToAddIngredientFragment()).addToBackStack(null).commit();
     }
 
     public void addIngredient(View v){
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Add Ingredient
                 if (!exists){
                     ingredientList.add(i);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).addToBackStack(null).commit();
                 } else {
                     Toast t = Toast.makeText(this, "Ingredient already exists", Toast.LENGTH_SHORT);
                     t.show();
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         args.putStringArrayList("IngredientList", ingredientNames);
         GoToAddMenuFragment fragment = new GoToAddMenuFragment();
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 
     public void addMenu(View v){
@@ -283,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 args.putString("menuTitle", m.getName());
                 GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
                 fragmentRecipe.setArguments(args);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
         }
     }
 
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
     public View.OnClickListener btnChoosePhotoPressed = new View.OnClickListener() {
