@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -309,5 +310,112 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("MuApp","rateMe");
         Toast.makeText(getApplicationContext(),
                 String.valueOf(ratingBar.getRating()), Toast.LENGTH_LONG).show();
+    }
+
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.checkbox_gluten:
+                if (checked){
+
+                }
+                // Put some meat on the sandwich
+            else
+                // Remove the meat
+                break;
+            case R.id.checkbox_shellfish:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_eggs:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_fish:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_peanut:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_soy:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_milk:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_nuts:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_celery:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_mustard:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_lupine:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+            case R.id.checkbox_molluscs:
+                if (checked){
+
+                }
+                // Cheese me
+            else
+                // I'm lactose intolerant
+                break;
+
+            // TODO: Veggie sandwich
+        }
     }
 }
