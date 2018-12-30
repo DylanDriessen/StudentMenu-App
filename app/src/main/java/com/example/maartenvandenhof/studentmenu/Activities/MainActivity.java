@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
     private Menu selectedMenu;
-
+    public RatingBar ratingBar;
     ImageView imageToUpLoad;
     Button bUploadImage;
 
@@ -95,8 +97,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList.add(menu1);
         menuList.add(menu2);
 
-        ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
-        btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+        //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
+        //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
     }
 
     @Override
@@ -301,40 +305,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
-    public View.OnClickListener btnChoosePhotoPressed = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            final int ACTIVITY_SELECT_IMAGE = 1234;
-            startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
-        }
-    };
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch(requestCode) {
-            case 1234:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-
-                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-                    /* Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want! */
-                }
-        }
-
-    };
-
-
+    public void rateMe(View v){
+        Log.d("MuApp","rateMe");
+        Toast.makeText(getApplicationContext(),
+                String.valueOf(ratingBar.getRating()), Toast.LENGTH_LONG).show();
+    }
 }
