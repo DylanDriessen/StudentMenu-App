@@ -8,6 +8,7 @@ public class Menu {
     private String description;
     private String recipe;
     private double price = 0;
+    private int rating;
 
 
     public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe) {
@@ -96,5 +97,14 @@ public class Menu {
 
     public void setRecipe(String recipe) {
         this.recipe = recipe;
+    }
+
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }
