@@ -1,5 +1,8 @@
 package com.example.maartenvandenhof.studentmenu;
 
+import android.media.ImageReader;
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 
 public class Menu {
@@ -8,13 +11,14 @@ public class Menu {
     private String description;
     private String recipe;
     private double price = 0;
+    private ImageView imageToUpload;
 
-
-    public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe) {
+    public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe, ImageView imageToUpload) {
 
         this.name = name;
         this.ingredients = ingredients;
         this.price = price;
+        this.imageToUpload = imageToUpload;
         setRecipe(recipe);
     }
 
@@ -96,5 +100,14 @@ public class Menu {
 
     public void setRecipe(String recipe) {
         this.recipe = recipe;
+    }
+
+
+    public ImageView getImageToUpload() {
+        return imageToUpload;
+    }
+
+    public void setImageToUpload(ImageView imageToUpload) {
+        this.imageToUpload = imageToUpload;
     }
 }
