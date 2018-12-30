@@ -1,16 +1,28 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
     private Menu selectedMenu;
+    public RatingBar ratingBar;
+    ImageView imageToUpLoad;
+    Button bUploadImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +96,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         menuList.add(menu1);
         menuList.add(menu2);
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+        //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
+        //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
     }
 
     @Override
@@ -283,5 +303,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
+    }
+
+    public void rateMe(View v){
+        Log.d("MuApp","rateMe");
+        Toast.makeText(getApplicationContext(),
+                String.valueOf(ratingBar.getRating()), Toast.LENGTH_LONG).show();
     }
 }
