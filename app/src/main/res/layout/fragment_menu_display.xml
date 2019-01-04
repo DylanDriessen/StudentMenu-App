@@ -82,62 +82,53 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/recipeText"
-            android:layout_width="350dp"
-            android:layout_height="356dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/lorem_ipsum"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.933"
-            />
-
-        <TextView
-            android:id="@+id/rate_me"
+        <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rate Me"
-            android:textSize="18dp"
+            android:layout_height="234dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.68"
-            />
+            app:layout_constraintVertical_bias="0.293">
+
+            <TextView
+                android:id="@+id/recipeText"
+                android:layout_width="365dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/lorem_ipsum"
+                android:textSize="20sp"
+
+                />
+        </ScrollView>
+
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:numStars="5"
             android:stepSize="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.8"
-            />
+            app:layout_constraintVertical_bias="0.797" />
 
         <Button
-            android:layout_below="@+id/ratingBar"
             android:id="@+id/submit"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
+            android:textColor="#FFF"
+            android:background="@color/colorPrimary"
             android:layout_height="wrap_content"
-            android:text="Rate"
+            android:layout_below="@+id/ratingBar"
             android:onClick="rateMe"
+            android:text="Rate"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.933"
-            />
+            app:layout_constraintVertical_bias="0.955" />
 
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
