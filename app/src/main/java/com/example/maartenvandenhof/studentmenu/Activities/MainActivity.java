@@ -334,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 m.setRating(ratingBar.getRating());
             }
         }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
     public void onCheckboxClicked(View view) {

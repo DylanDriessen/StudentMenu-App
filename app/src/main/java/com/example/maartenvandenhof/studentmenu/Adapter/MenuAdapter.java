@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,13 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
         ((myViewHolder) viewHolder).menuDescription.setText(menuData.get(i).getDescription());
         ((myViewHolder) viewHolder).menuPrice.setText("€" +  menuData.get(i).getPrice());
         ((myViewHolder) viewHolder).itemMenu = menuData.get(i);
+
+        if (menuData.get(i).getRating() == 0.0){
+            ((myViewHolder) viewHolder).ratingBar.setVisibility(View.INVISIBLE);
+        } else {
+            ((myViewHolder) viewHolder).ratingBar.setVisibility(View.VISIBLE);
+            ((myViewHolder) viewHolder).ratingBar.setRating((float)menuData.get(i).getRating());
+        }
     }
 
     @Override
@@ -64,11 +72,12 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
 
         TextView menuTitle, menuDescription, menuPrice;
         Menu itemMenu = new Menu();
+        RatingBar ratingBar;
 
         public myViewHolder(View itemView){
             super(itemView);
 
-
+            ratingBar = itemView.findViewById(R.id.ratingBar);
             menuTitle = itemView.findViewById(R.id.menuListViewText);
             menuDescription = itemView.findViewById(R.id.menuDescription);
             menuPrice = itemView.findViewById(R.id.menuPrice);
