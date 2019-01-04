@@ -72,7 +72,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menuIngredientRecycler"
             android:layout_width="350dp"
-            android:layout_height="41dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
@@ -84,13 +85,13 @@
 
         <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="234dp"
+            android:layout_height="247dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.293">
+            app:layout_constraintVertical_bias="0.268">
 
             <TextView
                 android:id="@+id/recipeText"
