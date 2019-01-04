@@ -38,6 +38,8 @@ import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -97,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         menuList.add(menu1);
         menuList.add(menu2);
-
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
         //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
@@ -307,9 +307,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void rateMe(View v){
-        Log.d("MuApp","rateMe");
-        Toast.makeText(getApplicationContext(),
-                String.valueOf(ratingBar.getRating()), Toast.LENGTH_LONG).show();
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        TextView name = (TextView)findViewById(R.id.menuDisplayTitle);
+        for (Menu m:menuList){
+            if (m.getName().equals(name.getText().toString())){
+                m.setRating(ratingBar.getRating());
+            }
+        }
     }
 
     public void onCheckboxClicked(View view) {
