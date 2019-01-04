@@ -203,11 +203,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void sortRating(View v)  {
         double rating = 5;
-
-        for(int x = 0; x <= menuList.size(); x++){
+        sortedList = new ArrayList<>();
+        for(int x = 0; x < menuList.size(); x++){
             if( menuList.get(x).getRating() == rating){
                 sortedList.add(menuList.get(x));
-
             }
             rating = rating - 0.5;
         }
