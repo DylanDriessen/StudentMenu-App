@@ -49,6 +49,7 @@
             <Button
                 android:id="@+id/bUploadImage"
                 android:text="Upload picture"
+                android:onClick="onPickImage"
                 android:background="@color/colorPrimary"
                 android:layout_height="50dp"
                 android:layout_width="250dp"

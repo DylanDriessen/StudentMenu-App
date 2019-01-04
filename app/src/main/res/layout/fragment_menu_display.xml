@@ -111,7 +111,6 @@
             app:layout_constraintVertical_bias="0.68"
             />
         <RatingBar
-            android:layout_below="@+id/rate_me"
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -130,7 +129,7 @@
             android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Submit"
+            android:text="Rate"
             android:onClick="rateMe"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -38,11 +38,14 @@ import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "Main Activity";
+    private static final int PICK_IMAGE_ID = 234 ;
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
@@ -116,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         menuList.add(menu1);
         menuList.add(menu2);
-
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
         //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
@@ -326,9 +327,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void rateMe(View v){
-        Log.d("MuApp","rateMe");
-        Toast.makeText(getApplicationContext(),
-                String.valueOf(ratingBar.getRating()), Toast.LENGTH_LONG).show();
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        TextView name = (TextView)findViewById(R.id.menuDisplayTitle);
+        for (Menu m:menuList){
+            if (m.getName().equals(name.getText().toString())){
+                m.setRating(ratingBar.getRating());
+            }
+        }
     }
 
     public void onCheckboxClicked(View view) {
@@ -435,6 +440,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             // TODO: Veggie sandwich
+        }
+    }
+
+    public void onPickImage(View view) {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case PICK_IMAGE_ID:
+                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                // TODO use bitmap
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
         }
     }
 }
