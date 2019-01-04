@@ -56,26 +56,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
-    private Menu selectedMenu;
     public RatingBar ratingBar;
     public ImageView imageToUpLoad;
     public Button bUploadImage;
     public ArrayList<Menu> sortedList;
+    private ArrayList<String> allergiesList;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
@@ -92,6 +79,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         menuList = new ArrayList<>();
         ingredientList = new ArrayList<>();
+        allergiesList = new ArrayList<>();
+        allergiesList.add("Gluten");
+        allergiesList.add("Fish");
+        allergiesList.add("Milk");
+        allergiesList.add("Mushrooms");
+        allergiesList.add("Mustard");
+        allergiesList.add("Eggs");
+        allergiesList.add("Celery");
+        allergiesList.add("Shellfish");
+        allergiesList.add("Nuts");
+        allergiesList.add("Peanuts");
+        allergiesList.add("Lupine");
+        allergiesList.add("Mollusc's");
+        allergiesList.add("Cheese");
+
 
         //Dummy menu's aanmaken
         Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
@@ -315,19 +317,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     if (!exists){
                         ingredientMenuList.add(newIng);
+                        ingredientList.add(newIng);
                     } else {
                         ingredientMenuList.add(existing);
                     }
                 }
 
-                Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
-                menuList.add(m);
-                Bundle args = new Bundle();
-                args.putString("menuTitle", m.getName());
-                GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
-                fragmentRecipe.setArguments(args);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+               if (ingredientMenuList.isEmpty()){
+                    Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
+               } else {
+                   Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
+                   menuList.add(m);
+                   Bundle args = new Bundle();
+                   args.putString("menuTitle", m.getName());
+                   GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
+                   fragmentRecipe.setArguments(args);
+                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+               }
         }
+    }
+
+    public void addMenuWithDescription(View v){
+        EditText recipe = findViewById(R.id.addMenuRecipe);
+        TextView menuTitle = findViewById(R.id.addMenuTitle);
+
+        for (Menu m:menuList){
+            if (m.getName().equals(menuTitle.getText().toString())){
+                m.setRecipe(recipe.getText().toString());
+            }
+        }
+        if (recipe.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
+        } else {
+            GoToAddMenuPictureFragment fragmentRecipe = new GoToAddMenuPictureFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+        }
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
     //Add Picture to menu
