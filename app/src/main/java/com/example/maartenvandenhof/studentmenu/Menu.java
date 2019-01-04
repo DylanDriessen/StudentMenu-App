@@ -14,6 +14,10 @@ public class Menu {
     private int rating;
     private ImageView imageToUpload;
 
+
+
+
+
     public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe, ImageView imageToUpload) {
 
         this.name = name;
@@ -102,4 +106,6 @@ public class Menu {
     public void setRecipe(String recipe) {
         this.recipe = recipe;
     }
+
+
 }

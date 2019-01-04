@@ -22,7 +22,7 @@ public class Ingredient {
         this.name = name;
     }
 
-    public double getPrice() {
+   public double getPrice() {
         return price;
     }
 

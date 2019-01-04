@@ -50,8 +50,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public RatingBar ratingBar;
     ImageView imageToUpLoad;
     Button bUploadImage;
+    public ArrayList<Menu> sortedList;
 
-    @Override
+
+
+
+
+
+
+    public void sortRating()  {
+        for(Menu menu: menuList) {
+            
+        }
+
+    }
+
+
+
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
@@ -81,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ingredientList.add(selder);
         ingredientList.add(patat);
         ingredientList.add(sla);
+
+
 
         ingredients1.add(wortel);
         ingredients1.add(patat);
