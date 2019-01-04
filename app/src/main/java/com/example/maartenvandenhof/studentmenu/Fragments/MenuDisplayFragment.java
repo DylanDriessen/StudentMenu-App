@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +31,14 @@ public class MenuDisplayFragment extends Fragment {
         TextView title = view.findViewById(R.id.menuDisplayTitle);
         TextView price = view.findViewById(R.id.menuDisplayPrice);
         TextView recipe = view.findViewById(R.id.recipeText);
+        //ImageView image = view.findViewById(R.id.backgroundPicture);
         RecyclerView ingredientList = view.findViewById(R.id.menuIngredientRecycler);
 
         String menuTitle = (String)getArguments().get("MenuTitle");
         String menuPrice = (String)getArguments().get("MenuPrice");
         String menuRecipe = (String)getArguments().get("MenuRecipe");
 
+        //image
         price.setText(menuPrice);
         title.setText(menuTitle);
         recipe.setText(menuRecipe);

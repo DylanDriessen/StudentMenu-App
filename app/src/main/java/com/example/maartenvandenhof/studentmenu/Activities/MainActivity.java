@@ -340,8 +340,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
         imageToUpLoad = (ImageView) findViewById(R.id.imageView);
         bUploadImage = (Button) findViewById(R.id.bUploadImage);
+
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, PICK_IMAGE_ID);
+        TextView menuTitle = findViewById(R.id.addMenuTitle);
+        for (Menu m:menuList){
+            if (m.getName().equals(menuTitle.getText().toString())){
+                m.setImageToUpload(imageToUpLoad);
+            }
+        }
     }
 
     @Override
@@ -369,14 +376,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addMenuWithDescription(View v){
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
+        Menu m1 = new Menu();
 
         for (Menu m:menuList){
             if (m.getName().equals(menuTitle.getText().toString())){
                 m.setRecipe(recipe.getText().toString());
+                m1 = m;
             }
         }
-        GoToAddMenuPictureFragment fragmentRecipe = new GoToAddMenuPictureFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+
+        Bundle args = new Bundle();
+        args.putString("menuTitle", m1.getName());
+        Log.d(TAG, m1.getName());
+        GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
+        fragmentPicture.setArguments(args);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 

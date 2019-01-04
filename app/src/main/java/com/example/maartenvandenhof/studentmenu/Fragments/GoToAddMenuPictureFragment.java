@@ -24,8 +24,8 @@ public class GoToAddMenuPictureFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_picture, container, false);
-        //TextView title = v.findViewById(R.id.addMenuTitle);
-        //title.setText(getArguments().get("menuTitle").toString());
+        TextView title = v.findViewById(R.id.addMenuTitle);
+        title.setText(getArguments().get("menuTitle").toString());
         return v;
     }
 }
