@@ -46,17 +46,7 @@
                 android:layout_height="50dp"
                 android:hint="@string/desc"
                 android:inputType="text"/>
-            <Button
-                android:id="@+id/bUploadImage"
-                android:text="Upload picture"
-                android:onClick="onPickImage"
-                android:background="@color/colorPrimary"
-                android:layout_height="50dp"
-                android:layout_width="250dp"
-                android:textColor="#FFF"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"/>
+
             <LinearLayout
                 android:layout_width="290dp"
                 android:layout_height="50dp"

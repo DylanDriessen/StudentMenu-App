@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragmentRecipeFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuPictureFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuDisplayFragment;
@@ -51,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Ingredient> ingredientList;
     private Menu selectedMenu;
     public RatingBar ratingBar;
-    ImageView imageToUpLoad;
-    Button bUploadImage;
+    public ImageView imageToUpLoad;
+    public Button bUploadImage;
     public ArrayList<Menu> sortedList;
 
 
@@ -120,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList.add(menu1);
         menuList.add(menu2);
 
-        //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
-        //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
+
+        //imageToUpLoad.setOnClickListener(this);
     }
 
     @Override
@@ -313,6 +315,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //Add Picture to menu
+    public void endPictureMenu(View v){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
+    }
+
+    public void onPickImage(View view) {
+        //Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        //startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+        imageToUpLoad = (ImageView) findViewById(R.id.imageView);
+        bUploadImage = (Button) findViewById(R.id.bUploadImage);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //switch(requestCode) {
+        //    case PICK_IMAGE_ID:
+                //Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+        //        Uri selectedImage = data.getData();
+        //        imageToUpLoad.setImageURI(selectedImage);
+        //        break;
+        //    default:
+        //        super.onActivityResult(requestCode, resultCode, data);
+         //       break;
+        //}
+
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK && data != null){
+            Uri selectedImage = data.getData();
+            if(selectedImage != null) {
+                imageToUpLoad.setImageURI(selectedImage);
+            }
+        }
+    }
+
     public void addMenuWithDescription(View v){
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
@@ -322,13 +360,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 m.setRecipe(recipe.getText().toString());
             }
         }
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
+        GoToAddMenuPictureFragment fragmentRecipe = new GoToAddMenuPictureFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
     public void rateMe(View v){
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        TextView name = (TextView)findViewById(R.id.menuDisplayTitle);
+        ratingBar = findViewById(R.id.ratingBar);
+        TextView name = findViewById(R.id.menuDisplayTitle);
         for (Menu m:menuList){
             if (m.getName().equals(name.getText().toString())){
                 m.setRating(ratingBar.getRating());
@@ -441,24 +480,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             // TODO: Veggie sandwich
-        }
-    }
-
-    public void onPickImage(View view) {
-        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case PICK_IMAGE_ID:
-                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                // TODO use bitmap
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
         }
     }
 }
