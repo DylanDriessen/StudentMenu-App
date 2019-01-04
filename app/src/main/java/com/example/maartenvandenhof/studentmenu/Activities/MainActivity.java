@@ -340,17 +340,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addMenuWithDescription(View v){
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
+        Menu m1 = new Menu();
 
         for (Menu m:menuList){
             if (m.getName().equals(menuTitle.getText().toString())){
                 m.setRecipe(recipe.getText().toString());
+                m1 = m;
             }
         }
         if (recipe.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
         } else {
-            GoToAddMenuPictureFragment fragmentRecipe = new GoToAddMenuPictureFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+            Bundle args = new Bundle();
+            args.putString("menuTitle", m1.getName());
+            Log.d(TAG, m1.getName());
+            GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
+            fragmentPicture.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
         }
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
@@ -398,26 +404,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void addMenuWithDescription(View v){
-        EditText recipe = findViewById(R.id.addMenuRecipe);
-        TextView menuTitle = findViewById(R.id.addMenuTitle);
-        Menu m1 = new Menu();
-
-        for (Menu m:menuList){
-            if (m.getName().equals(menuTitle.getText().toString())){
-                m.setRecipe(recipe.getText().toString());
-                m1 = m;
-            }
-        }
-
-        Bundle args = new Bundle();
-        args.putString("menuTitle", m1.getName());
-        Log.d(TAG, m1.getName());
-        GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
-        fragmentPicture.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
-    }
+    
 
     public void rateMe(View v){
         ratingBar = findViewById(R.id.ratingBar);
