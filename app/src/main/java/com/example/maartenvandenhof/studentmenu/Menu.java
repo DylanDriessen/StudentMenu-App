@@ -20,8 +20,12 @@ public class Menu {
     private String description;
     private String recipe;
     private double price = 0;
-    private int rating;
+    private double rating;
     private ImageView imageToUpload;
+
+
+
+
 
     public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe, ImageView imageToUpload) {
 
@@ -111,4 +115,13 @@ public class Menu {
     public void setRecipe(String recipe) {
         this.recipe = recipe;
     }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
 }
