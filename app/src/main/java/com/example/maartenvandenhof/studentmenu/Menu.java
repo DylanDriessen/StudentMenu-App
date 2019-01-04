@@ -1,9 +1,18 @@
 package com.example.maartenvandenhof.studentmenu;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.media.ImageReader;
+import android.net.Uri;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static android.support.v4.graphics.TypefaceCompatUtil.getTempFile;
 
 public class Menu {
     private String name;

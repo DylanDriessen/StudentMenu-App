@@ -43,6 +43,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "Main Activity";
+    private static final int PICK_IMAGE_ID = 234 ;
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
@@ -416,6 +417,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             // TODO: Veggie sandwich
+        }
+    }
+
+    public void onPickImage(View view) {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case PICK_IMAGE_ID:
+                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                // TODO use bitmap
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
         }
     }
 }
