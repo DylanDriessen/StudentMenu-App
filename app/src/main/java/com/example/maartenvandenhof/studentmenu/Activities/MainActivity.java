@@ -313,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     if (!exists){
                         ingredientMenuList.add(newIng);
+                        ingredientList.add(newIng);
                     } else {
                         ingredientMenuList.add(existing);
                     }
