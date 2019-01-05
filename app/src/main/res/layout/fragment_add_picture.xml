@@ -81,7 +81,7 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
                 android:background="@color/colorPrimary"
-                android:onClick="onPickImage"
+                android:onClick="loadImagefromGallery"
                 android:text="select"
                 android:textColor="#FFF"
                 android:textSize="20sp"

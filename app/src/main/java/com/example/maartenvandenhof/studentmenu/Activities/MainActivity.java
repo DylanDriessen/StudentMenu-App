@@ -1,16 +1,22 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -59,8 +65,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public RatingBar ratingBar;
     public ImageView imageToUpLoad;
     public Button bUploadImage;
+    public String mFilePath;
+    public String imgpath,storedpath;
+    public SharedPreferences sp;
     public ArrayList<Menu> sortedList;
     private ArrayList<String> allergiesList;
+
+
+    /*private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         menuList.add(menu1);
         menuList.add(menu2);
+
+
 
 
         //imageToUpLoad.setOnClickListener(this);
@@ -340,17 +358,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addMenuWithDescription(View v){
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
+        Menu m1 = new Menu();
 
         for (Menu m:menuList){
             if (m.getName().equals(menuTitle.getText().toString())){
                 m.setRecipe(recipe.getText().toString());
+                m1 = m;
             }
         }
         if (recipe.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
         } else {
-            GoToAddMenuPictureFragment fragmentRecipe = new GoToAddMenuPictureFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+            Bundle args = new Bundle();
+            args.putString("menuTitle", m1.getName());
+            GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
+            fragmentPicture.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
         }
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
@@ -360,63 +383,85 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
-    public void onPickImage(View view) {
-        //Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        //startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    /*public void onPickImage(View view) {
         imageToUpLoad = (ImageView) findViewById(R.id.imageView);
-        bUploadImage = (Button) findViewById(R.id.bUploadImage);
+       bUploadImage = (Button) findViewById(R.id.bUploadImage);
 
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, PICK_IMAGE_ID);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
+        Log.d(TAG, "test");
         for (Menu m:menuList){
             if (m.getName().equals(menuTitle.getText().toString())){
+                Log.d(TAG, "test2");
                 m.setImageToUpload(imageToUpLoad);
+                Log.d(TAG, "test3");
             }
         }
+    }*/
+
+    public void loadImagefromGallery(View view) {
+        imageToUpLoad = (ImageView) findViewById(R.id.imageView);
+        sp=getSharedPreferences("setback", MODE_PRIVATE);
+        if(sp.contains("imagepath")) {
+            storedpath=sp.getString("imagepath", "");
+            imageToUpLoad.setImageBitmap(BitmapFactory.decodeFile(storedpath));
+        }
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //switch(requestCode) {
-        //    case PICK_IMAGE_ID:
-                //Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-        //        Uri selectedImage = data.getData();
-        //        imageToUpLoad.setImageURI(selectedImage);
-        //        break;
-        //    default:
-        //        super.onActivityResult(requestCode, resultCode, data);
-         //       break;
-        //}
-
         super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK && data != null){
-            Uri selectedImage = data.getData();
-            if(selectedImage != null) {
-                imageToUpLoad.setImageURI(selectedImage);
+        try {
+            // When an Image is picked
+            if (requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.MediaColumns.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgpath = cursor.getString(columnIndex);
+                Log.d("path", imgpath);
+                cursor.close();
+
+                SharedPreferences.Editor edit=sp.edit();
+                edit.putString("imagepath",imgpath);
+                edit.commit();
+
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgpath);
+
+                imageToUpLoad.setImageBitmap(myBitmap);
             }
-        }
-    }
-
-    public void addMenuWithDescription(View v){
-        EditText recipe = findViewById(R.id.addMenuRecipe);
-        TextView menuTitle = findViewById(R.id.addMenuTitle);
-        Menu m1 = new Menu();
-
-        for (Menu m:menuList){
-            if (m.getName().equals(menuTitle.getText().toString())){
-                m.setRecipe(recipe.getText().toString());
-                m1 = m;
+            else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
             }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
         }
-
-        Bundle args = new Bundle();
-        args.putString("menuTitle", m1.getName());
-        Log.d(TAG, m1.getName());
-        GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
-        fragmentPicture.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
+        //if(requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK && data != null){
+        //    Uri selectedImage = data.getData();
+        //    if(selectedImage != null) {
+        //        Log.d(TAG, "test4");
+        //        imageToUpLoad.setImageURI(selectedImage);
+        //        Log.d(TAG, "test5" + selectedImage.toString());
+        //    }
+        //}
     }
 
     public void rateMe(View v){
@@ -536,4 +581,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // TODO: Veggie sandwich
         }
     }
+
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }*/
 }
