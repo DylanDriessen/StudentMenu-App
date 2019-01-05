@@ -638,9 +638,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void shareButton(View v){
+        TextView title = findViewById(R.id.menuDisplayTitle);
+        TextView price = findViewById(R.id.menuDisplayPrice);
+        TextView recipe = findViewById(R.id.recipeText);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Here is the share content body";
+        String shareBody = "Hi! I found this cool recipe on the StudentMenu App \n\n" + title.getText().toString() + " \n\nFor only " + price.getText().toString() +"! \n\nHere is the recipe if u would like to try it. \n\n" + recipe.getText().toString();
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
