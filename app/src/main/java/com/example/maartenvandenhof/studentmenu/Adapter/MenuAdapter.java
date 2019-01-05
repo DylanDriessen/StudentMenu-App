@@ -60,6 +60,7 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
 
     @Override
     public int getItemCount() {
+
         return menuData.size();
     }
 

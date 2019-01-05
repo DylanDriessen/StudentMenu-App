@@ -25,17 +25,7 @@
     android:onClick="goToAddMenu"/>
 
 
-    <Button
-        android:layout_width="123dp"
-        android:layout_height="66dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="513dp"
-        android:onClick="sortRating"
-        android:text="Order by rating"
-        android:textColor="#FFF"
-        android:background="@drawable/add_button_layout"/>
+  
 
 
     <Button
