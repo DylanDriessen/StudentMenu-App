@@ -44,6 +44,7 @@ import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuIngredientFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuRecipeFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuPictureFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoogleMapsFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuDisplayFragment;
@@ -53,6 +54,12 @@ import com.example.maartenvandenhof.studentmenu.Fragments.MenuOrdendListFragment
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.PriceOrdendListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.WeekMenuListFragment;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.w3c.dom.Text;
 
@@ -84,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<String> allergiesList;
     public ArrayList<String> allergiesListWeek;
 
+
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
             android.Manifest.permission.READ_CONTACTS,
@@ -92,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.READ_SMS,
             android.Manifest.permission.CAMERA,
-            android.Manifest.permission.INTERNET
+            android.Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_FINE_LOCATION
     };
 
     @Override
@@ -192,6 +201,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.il:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.gm:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoogleMapsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.sMenu:
                 notImplemented.show();
@@ -682,6 +694,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
+
 
 
     /*@Override
