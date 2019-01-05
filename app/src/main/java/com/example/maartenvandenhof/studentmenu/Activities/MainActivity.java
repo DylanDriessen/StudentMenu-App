@@ -3,6 +3,7 @@ package com.example.maartenvandenhof.studentmenu.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -57,6 +58,8 @@ import static java.util.Comparator.comparing;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
 import android.widget.AdapterView.OnItemSelectedListener;
 
 
@@ -77,12 +80,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedPriceList;
     private ArrayList<String> allergiesList;
 
-
-    /*private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {
+            android.Manifest.permission.READ_CONTACTS,
+            android.Manifest.permission.WRITE_CONTACTS,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };*/
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_SMS,
+            android.Manifest.permission.CAMERA
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,10 +154,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList.add(menu1);
         menuList.add(menu2);
 
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
 
-
-
-        //imageToUpLoad.setOnClickListener(this);
     }
 
     @Override
@@ -415,30 +419,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentPicture.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
         }
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
     //Add Picture to menu
     public void endPictureMenu(View v){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
-
-    /*public void onPickImage(View view) {
-        imageToUpLoad = (ImageView) findViewById(R.id.imageView);
-       bUploadImage = (Button) findViewById(R.id.bUploadImage);
-
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
-        TextView menuTitle = findViewById(R.id.addMenuTitle);
-        Log.d(TAG, "test");
-        for (Menu m:menuList){
-            if (m.getName().equals(menuTitle.getText().toString())){
-                Log.d(TAG, "test2");
-                m.setImageToUpload(imageToUpLoad);
-                Log.d(TAG, "test3");
-            }
-        }
-    }*/
 
     public void loadImagefromGallery(View view) {
         imageToUpLoad = (ImageView) findViewById(R.id.imageView);
@@ -485,6 +471,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgpath);
 
                 imageToUpLoad.setImageBitmap(myBitmap);
+                Log.d(TAG, "lijst " + myBitmap.toString());
             }
             else {
                 Toast.makeText(this, "You haven't picked Image",
@@ -494,14 +481,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
                     .show();
         }
-        //if(requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK && data != null){
-        //    Uri selectedImage = data.getData();
-        //    if(selectedImage != null) {
-        //        Log.d(TAG, "test4");
-        //        imageToUpLoad.setImageURI(selectedImage);
-        //        Log.d(TAG, "test5" + selectedImage.toString());
-        //    }
-        //}
     }
 
     public void rateMe(View v){
