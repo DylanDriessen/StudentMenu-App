@@ -69,9 +69,6 @@ public class GoToAddMenuIngredientFragment extends Fragment {
                 }
                 if (name.getText().toString().isEmpty() || price.getText().toString().isEmpty()){
                     Toast.makeText((MainActivity)getActivity(), "Fill in a name and price", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast t = Toast.makeText((MainActivity)getActivity(), "Ingredient already added", Toast.LENGTH_SHORT);
-                    t.show();
                 }
             }
         };
