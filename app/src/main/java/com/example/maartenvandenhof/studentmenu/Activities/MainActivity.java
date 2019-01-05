@@ -155,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void showMap() {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)){
@@ -193,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.gm:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoogleMapsFragment()).addToBackStack(null).commit();
+                showMap();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoogleMapsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.sMenu:
                 notImplemented.show();
