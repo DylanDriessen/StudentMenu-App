@@ -16,4 +16,6 @@
     <string name="next">Next</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque debitis incidunt mollitia nisi totam, veritatis? Ea eligendi, ipsum itaque quam quasi quisquam repellat! Harum id, natus quis rem repudiandae sint.</string>
     <string name="pick_image_intent_text">Select Photo</string>
+
+
 </resources>

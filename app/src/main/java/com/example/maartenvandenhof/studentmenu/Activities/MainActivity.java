@@ -17,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +49,8 @@ import static java.util.Comparator.comparing;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import android.widget.AdapterView.OnItemSelectedListener;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView imageToUpLoad;
     Button bUploadImage;
     public ArrayList<Menu> sortedList;
+    public ArrayList<Menu> sortedPriceList;
 
 
 
@@ -67,13 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
-
-
-
-
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
         //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
+
+
+
     }
 
     @Override
@@ -201,17 +204,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void sortRating(View v)  {
-        double rating = 5;
-        sortedList = new ArrayList<>();
-        for(int x = 0; x < menuList.size(); x++){
-            if( menuList.get(x).getRating() == rating){
-                sortedList.add(menuList.get(x));
-            }
-            rating = rating - 0.5;
+    public void sortPrice(View v){
+
+        sortedPriceList = new ArrayList<>();
+        sortedPriceList = menuList;
+        Collections.sort(sortedPriceList,PriceOrde);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
+
+
+
+    }
+
+    public static Comparator<Menu> PriceOrde = new Comparator<Menu>() {
+        @Override
+        public int compare(Menu o1, Menu o2) {
+            int i = (int) Math.round(o1.getPrice()*100);
+            int j = (int) Math.round(o2.getPrice()*100);
+
+            int menu1 = i;
+            int menu2 = j;
+            return menu2 - menu1;
+
         }
+    };
+
+    public void sortRating(View v)  {
+
+        sortedList = new ArrayList<>();
+        sortedList = menuList;
+        Collections.sort(sortedList,MenuOrde);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
     }
+
+    //
+    public static Comparator<Menu> MenuOrde = new Comparator<Menu>() {
+        @Override
+        public int compare(Menu o1, Menu o2) {
+            int menu1 = o1.getRating();
+            int menu2 = o2.getRating();
+            return menu2 - menu1;
+        }
+    };
+
+
 
     //Show Menu description
     public void menuDescription(String menuTitle, String menuPrice, String menuRecipe, ArrayList<String> ingredientList){
@@ -346,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView name = (TextView)findViewById(R.id.menuDisplayTitle);
         for (Menu m:menuList){
             if (m.getName().equals(name.getText().toString())){
-                m.setRating(ratingBar.getRating());
+                m.setRating(Math.round(ratingBar.getRating()));
             }
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
