@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public SharedPreferences sp;
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
-    private ArrayList<String> allergiesList;
+    public ArrayList<String> allergiesList;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                        args.putString("menuTitle", m.getName());
                        GoToAddMenuIngredientFragment fragment = new GoToAddMenuIngredientFragment();
                        fragment.setArguments(args);
-                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                    }
         }
     }
@@ -378,52 +378,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayList<Integer> priceList = new ArrayList<>();
         ArrayList<ArrayList> allergyList = new ArrayList<>();
 
-        for( int i = 0; i < ingredients.getChildCount(); i++) {
-            if (ingredients.getChildAt(i) instanceof TextView) {
-                priceList.add(Integer.parseInt(((TextView) ingredientsPrices.getChildAt(i)).getText().toString()));
-                names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
-                LinearLayout al = (LinearLayout) allergies.getChildAt(i);
-                ArrayList<String> stringAl = new ArrayList<>();
-                for (int j = 0; j < al.getChildCount(); j++){
-                    stringAl.add(((TextView)al.getChildAt(j)).getText().toString().trim());
-                }
-                allergyList.add(stringAl);
-            }
-        }
-
-
-        for (int i = 0; i<names.size(); i++){
-            boolean exists = false;
-            Ingredient existing = null;
-            Ingredient newIng = new Ingredient(names.get(i), priceList.get(i));
-            newIng.setAllergies(allergyList.get(i));
-            for (Ingredient ing:ingredientList){
-                if (ing.getName().equals(newIng.getName())){
-                    exists = true;
-                    existing = ing;
+        if (ingredients.getChildAt(0) != null){
+            for( int i = 0; i < ingredients.getChildCount(); i++) {
+                if (ingredients.getChildAt(i) instanceof TextView) {
+                    priceList.add(Integer.parseInt(((TextView) ingredientsPrices.getChildAt(i)).getText().toString()));
+                    names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
+                    LinearLayout al = (LinearLayout) allergies.getChildAt(i);
+                    ArrayList<String> stringAl = new ArrayList<>();
+                    for (int j = 0; j < al.getChildCount(); j++){
+                        stringAl.add(((TextView)al.getChildAt(j)).getText().toString().trim());
+                    }
+                    allergyList.add(stringAl);
                 }
             }
-            if (!exists){
-                ingredientMenuList.add(newIng);
-                ingredientList.add(newIng);
-            } else {
-                ingredientMenuList.add(existing);
-            }
 
-            if (ingredientMenuList.isEmpty()){
-                Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
-            } else {
-                for (Menu m:menuList){
-                    if (m.getName().equals(menuTitel.getText().toString().trim())){
-                        m.setIngredient(ingredientMenuList);
+
+            for (int i = 0; i<names.size(); i++){
+                boolean exists = false;
+                Ingredient existing = null;
+                Ingredient newIng = new Ingredient(names.get(i), priceList.get(i));
+                newIng.setAllergies(allergyList.get(i));
+                for (Ingredient ing:ingredientList){
+                    if (ing.getName().equals(newIng.getName())){
+                        exists = true;
+                        existing = ing;
                     }
                 }
+                if (!exists){
+                    ingredientMenuList.add(newIng);
+                    ingredientList.add(newIng);
+                } else {
+                    ingredientMenuList.add(existing);
+                }
+
+                if (ingredientMenuList.isEmpty()){
+                    Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
+                } else {
+                    for (Menu m:menuList){
+                        if (m.getName().equals(menuTitel.getText().toString().trim())){
+                            m.setIngredient(ingredientMenuList);
+                        }
+                    }
+                }
+
             }
             Bundle args = new Bundle();
             args.putString("menuTitle", menuTitel.getText().toString().trim());
             GoToAddMenuRecipeFragment fragment = new GoToAddMenuRecipeFragment();
             fragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        } else {
+            Toast.makeText(this, "Please add an ingredient", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -446,14 +451,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, m1.getName());
             GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
             fragmentPicture.setArguments(args);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).commit();
         }
     }
 
 
     //Add Picture to menu
     public void endPictureMenu(View v){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
     }
 
     public void loadImagefromGallery(View view) {
