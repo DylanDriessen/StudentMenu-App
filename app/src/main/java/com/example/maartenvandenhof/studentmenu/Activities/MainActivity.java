@@ -52,6 +52,7 @@ import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuOrdendListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.PriceOrdendListFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.WeekMenuListFragment;
 
 import org.w3c.dom.Text;
 
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
     public ArrayList<String> allergiesList;
+    public ArrayList<String> allergiesListWeek;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -219,6 +221,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 args.putDouble("price", price);
                 fragment.setArguments(args);
 
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+
+            } catch (NumberFormatException e){
+                Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+                t.show();
+            }
+        }
+    }
+
+    //Search Week Menu Button
+    public void searchWeekMenu(View v){
+        SearchView priceSearch = findViewById(R.id.searchPriceField);
+        String text = "Please fill in a number";
+
+        if (priceSearch.getQuery() != null){
+            CharSequence query = priceSearch.getQuery();
+            String temp = query.toString();
+            try{
+                double price = Double.parseDouble(temp);
+                WeekMenuListFragment fragment = new WeekMenuListFragment();
+
+                Bundle args = new Bundle();
+                args.putDouble("price", price);
+                fragment.setArguments(args);
+                allergiesListWeek = new ArrayList<>();
+                allergiesListWeek = allergiesList;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
             } catch (NumberFormatException e){

@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:background="#00aeff"
-                        android:onClick="searchMenuPrice"
+                        android:onClick="searchWeekMenu"
                         android:text="Search week"
                         android:textColor="@android:color/white"
                         android:layout_marginHorizontal="5dp"/>
