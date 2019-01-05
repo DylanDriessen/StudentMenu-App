@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +53,13 @@ public class GoToAddMenuFragment extends Fragment {
                         }
                     }
                 }
-                if (!ingredientExists){
+
+                if (!ingredientExists && !name.getText().toString().isEmpty() && !price.getText().toString().isEmpty()){
                     ingredientC.addView(createNewTextView(name.getText().toString()));
                     priceC.addView(createNewTextView(price.getText().toString()));
+                }
+                if (name.getText().toString().isEmpty() || price.getText().toString().isEmpty()){
+                    Toast.makeText((MainActivity)getActivity(), "Fill in a name and price", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast t = Toast.makeText((MainActivity)getActivity(), "Ingredient already added", Toast.LENGTH_SHORT);
                     t.show();

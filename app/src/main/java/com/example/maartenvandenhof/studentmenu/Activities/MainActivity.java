@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragmentRecipeFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuPictureFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuDisplayFragment;
@@ -59,19 +61,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
-    private Menu selectedMenu;
     public RatingBar ratingBar;
-    ImageView imageToUpLoad;
-    Button bUploadImage;
+    public ImageView imageToUpLoad;
+    public Button bUploadImage;
     public ArrayList<Menu> sortedList;
-    public ArrayList<Menu> sortedPriceList;
-
-
-
-
-
-
-
+    private ArrayList<String> allergiesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +84,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         menuList = new ArrayList<>();
         ingredientList = new ArrayList<>();
+        allergiesList = new ArrayList<>();
+        /*allergiesList.add("Gluten");
+        allergiesList.add("Fish");
+        allergiesList.add("Milk");
+        allergiesList.add("Mushrooms");
+        allergiesList.add("Mustard");
+        allergiesList.add("Eggs");
+        allergiesList.add("Celery");
+        allergiesList.add("Shellfish");
+        allergiesList.add("Nuts");
+        allergiesList.add("Peanuts");
+        allergiesList.add("Lupine");
+        allergiesList.add("Mollusc's");
+        allergiesList.add("Cheese");*/
+
 
         //Dummy menu's aanmaken
         Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
@@ -122,11 +131,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList.add(menu1);
         menuList.add(menu2);
 
-        //ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.bUploadImage); // Replace with id of your button.
-        //btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
 
-
-
+        //imageToUpLoad.setOnClickListener(this);
     }
 
     @Override
@@ -349,37 +355,98 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     if (!exists){
                         ingredientMenuList.add(newIng);
+                        ingredientList.add(newIng);
                     } else {
                         ingredientMenuList.add(existing);
                     }
                 }
 
-                Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
-                menuList.add(m);
-                Bundle args = new Bundle();
-                args.putString("menuTitle", m.getName());
-                GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
-                fragmentRecipe.setArguments(args);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+               if (ingredientMenuList.isEmpty()){
+                    Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
+               } else {
+                   Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
+                   menuList.add(m);
+                   Bundle args = new Bundle();
+                   args.putString("menuTitle", m.getName());
+                   GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
+                   fragmentRecipe.setArguments(args);
+                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
+               }
         }
     }
 
     public void addMenuWithDescription(View v){
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
+        Menu m1 = new Menu();
 
         for (Menu m:menuList){
             if (m.getName().equals(menuTitle.getText().toString())){
                 m.setRecipe(recipe.getText().toString());
+                m1 = m;
             }
         }
+        if (recipe.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
+        } else {
+            Bundle args = new Bundle();
+            args.putString("menuTitle", m1.getName());
+            Log.d(TAG, m1.getName());
+            GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
+            fragmentPicture.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
+        }
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
+    }
 
+    //Add Picture to menu
+    public void endPictureMenu(View v){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
+    public void onPickImage(View view) {
+        //Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        //startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+        imageToUpLoad = (ImageView) findViewById(R.id.imageView);
+        bUploadImage = (Button) findViewById(R.id.bUploadImage);
+
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
+        TextView menuTitle = findViewById(R.id.addMenuTitle);
+        for (Menu m:menuList){
+            if (m.getName().equals(menuTitle.getText().toString())){
+                m.setImageToUpload(imageToUpLoad);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //switch(requestCode) {
+        //    case PICK_IMAGE_ID:
+                //Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+        //        Uri selectedImage = data.getData();
+        //        imageToUpLoad.setImageURI(selectedImage);
+        //        break;
+        //    default:
+        //        super.onActivityResult(requestCode, resultCode, data);
+         //       break;
+        //}
+
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK && data != null){
+            Uri selectedImage = data.getData();
+            if(selectedImage != null) {
+                imageToUpLoad.setImageURI(selectedImage);
+            }
+        }
+    }
+
+
+
     public void rateMe(View v){
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        TextView name = (TextView)findViewById(R.id.menuDisplayTitle);
+        ratingBar = findViewById(R.id.ratingBar);
+        TextView name = findViewById(R.id.menuDisplayTitle);
         for (Menu m:menuList){
             if (m.getName().equals(name.getText().toString())){
                 m.setRating(Math.round(ratingBar.getRating()));
@@ -396,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(view.getId()) {
             case R.id.checkbox_gluten:
                 if (checked){
-
+                   
                 }
                 // Put some meat on the sandwich
             else
@@ -492,24 +559,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             // TODO: Veggie sandwich
-        }
-    }
-
-    public void onPickImage(View view) {
-        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case PICK_IMAGE_ID:
-                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                // TODO use bitmap
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
         }
     }
 }

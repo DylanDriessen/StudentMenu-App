@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="@string/add_menu"
                 android:textAlignment="center"
                 android:textColor="#FFF"
@@ -38,7 +38,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/name"
-                android:inputType="text"/>
+                android:inputType="text" />
 
             <EditText
                 android:id="@+id/addMenuDescription"
@@ -46,21 +46,12 @@
                 android:layout_height="50dp"
                 android:hint="@string/desc"
                 android:inputType="text"/>
-            <Button
-                android:id="@+id/bUploadImage"
-                android:text="Upload picture"
-                android:onClick="onPickImage"
-                android:background="@color/colorPrimary"
-                android:layout_height="50dp"
-                android:layout_width="250dp"
-                android:textColor="#FFF"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"/>
+
             <LinearLayout
                 android:layout_width="290dp"
                 android:layout_height="50dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
                 <EditText
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
@@ -70,7 +61,6 @@
                 <EditText
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:hint="@string/price"
                     android:id="@+id/menuAddIngredientPrice"
                     android:inputType="numberDecimal"/>
@@ -85,9 +75,11 @@
                     android:background="@drawable/back_white"/>
             </LinearLayout>
 
+
+
             <ScrollView
                 android:layout_width="300dp"
-                android:layout_height="100dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
                 <LinearLayout
@@ -104,7 +96,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_gravity="left"
                         android:id="@+id/addMenuIngredientColunm"
                         android:orientation="vertical">
 
@@ -114,7 +106,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_gravity="left"
                         android:id="@+id/addMenuPriceColunm"
                         android:orientation="vertical">
 

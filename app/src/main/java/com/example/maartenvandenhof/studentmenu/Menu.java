@@ -23,12 +23,7 @@ public class Menu {
     private int rating;
     private ImageView imageToUpload;
 
-
-
-
-
     public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe, ImageView imageToUpload) {
-
         this.name = name;
         this.ingredients = ingredients;
         this.price = price;
@@ -122,6 +117,14 @@ public class Menu {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public ImageView getImageToUpload() {
+        return imageToUpload;
+    }
+
+    public void setImageToUpload(ImageView imageToUpload) {
+        this.imageToUpload = imageToUpload;
     }
 
 }
