@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList = new ArrayList<>();
         ingredientList = new ArrayList<>();
         allergiesList = new ArrayList<>();
-        allergiesList.add("Gluten");
+        /*allergiesList.add("Gluten");
         allergiesList.add("Fish");
         allergiesList.add("Milk");
         allergiesList.add("Mushrooms");
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         allergiesList.add("Peanuts");
         allergiesList.add("Lupine");
         allergiesList.add("Mollusc's");
-        allergiesList.add("Cheese");
+        allergiesList.add("Cheese");*/
 
 
         //Dummy menu's aanmaken
@@ -425,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(view.getId()) {
             case R.id.checkbox_gluten:
                 if (checked){
-
+                    Toast.makeText(this, "gluteeen", Toast.LENGTH_SHORT).show();
                 }
                 // Put some meat on the sandwich
             else
