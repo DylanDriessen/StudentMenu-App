@@ -24,6 +24,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -32,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +57,8 @@ import static java.util.Comparator.comparing;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import android.widget.AdapterView.OnItemSelectedListener;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -96,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList = new ArrayList<>();
         ingredientList = new ArrayList<>();
         allergiesList = new ArrayList<>();
-        allergiesList.add("Gluten");
+        /*allergiesList.add("Gluten");
         allergiesList.add("Fish");
         allergiesList.add("Milk");
         allergiesList.add("Mushrooms");
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         allergiesList.add("Peanuts");
         allergiesList.add("Lupine");
         allergiesList.add("Mollusc's");
-        allergiesList.add("Cheese");
+        allergiesList.add("Cheese");*/
 
 
         //Dummy menu's aanmaken
@@ -223,17 +228,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void sortRating(View v)  {
-        double rating = 5;
-        sortedList = new ArrayList<>();
-        for(int x = 0; x < menuList.size(); x++){
-            if( menuList.get(x).getRating() == rating){
-                sortedList.add(menuList.get(x));
-            }
-            rating = rating - 0.5;
+    public void sortPrice(View v){
+
+        sortedPriceList = new ArrayList<>();
+        sortedPriceList = menuList;
+        Collections.sort(sortedPriceList,PriceOrde);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
+
+
+
+    }
+
+    public static Comparator<Menu> PriceOrde = new Comparator<Menu>() {
+        @Override
+        public int compare(Menu o1, Menu o2) {
+            int i = (int) Math.round(o1.getPrice()*100);
+            int j = (int) Math.round(o2.getPrice()*100);
+
+            int menu1 = i;
+            int menu2 = j;
+            return menu2 - menu1;
+
         }
+    };
+
+    public void sortRating(View v)  {
+
+        sortedList = new ArrayList<>();
+        sortedList = menuList;
+        Collections.sort(sortedList,MenuOrde);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
     }
+
+    //
+    public static Comparator<Menu> MenuOrde = new Comparator<Menu>() {
+        @Override
+        public int compare(Menu o1, Menu o2) {
+            int menu1 = o1.getRating();
+            int menu2 = o2.getRating();
+            return menu2 - menu1;
+        }
+    };
+
+
 
     //Show Menu description
     public void menuDescription(String menuTitle, String menuPrice, String menuRecipe, ArrayList<String> ingredientList){
@@ -371,6 +409,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Bundle args = new Bundle();
             args.putString("menuTitle", m1.getName());
+            Log.d(TAG, m1.getName());
             GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
             fragmentPicture.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
@@ -469,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView name = findViewById(R.id.menuDisplayTitle);
         for (Menu m:menuList){
             if (m.getName().equals(name.getText().toString())){
-                m.setRating(ratingBar.getRating());
+                m.setRating(Math.round(ratingBar.getRating()));
             }
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
@@ -483,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(view.getId()) {
             case R.id.checkbox_gluten:
                 if (checked){
-
+                   
                 }
                 // Put some meat on the sandwich
             else

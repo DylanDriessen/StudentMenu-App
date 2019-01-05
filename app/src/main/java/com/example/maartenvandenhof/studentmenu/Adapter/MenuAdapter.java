@@ -12,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Menu;
 import com.example.maartenvandenhof.studentmenu.R;
@@ -53,7 +54,7 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
             ((myViewHolder) viewHolder).ratingBar.setVisibility(View.INVISIBLE);
         } else {
             ((myViewHolder) viewHolder).ratingBar.setVisibility(View.VISIBLE);
-            ((myViewHolder) viewHolder).ratingBar.setRating((float)menuData.get(i).getRating());
+            ((myViewHolder) viewHolder).ratingBar.setRating(menuData.get(i).getRating());
         }
     }
 
