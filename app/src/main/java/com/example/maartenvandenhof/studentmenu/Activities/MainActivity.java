@@ -1,11 +1,6 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -31,7 +25,8 @@ import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
-import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragmentRecipeFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuIngredientFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuRecipeFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuPictureFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.HomeScreenFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.IngredientListFragment;
@@ -45,9 +40,6 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ImageView imageToUpLoad;
     public Button bUploadImage;
     public ArrayList<Menu> sortedList;
-    private ArrayList<String> allergiesList;
+    public ArrayList<String> allergiesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,20 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList = new ArrayList<>();
         ingredientList = new ArrayList<>();
         allergiesList = new ArrayList<>();
-        /*allergiesList.add("Gluten");
-        allergiesList.add("Fish");
-        allergiesList.add("Milk");
-        allergiesList.add("Mushrooms");
-        allergiesList.add("Mustard");
-        allergiesList.add("Eggs");
-        allergiesList.add("Celery");
-        allergiesList.add("Shellfish");
-        allergiesList.add("Nuts");
-        allergiesList.add("Peanuts");
-        allergiesList.add("Lupine");
-        allergiesList.add("Mollusc's");
-        allergiesList.add("Cheese");*/
-
 
         //Dummy menu's aanmaken
         Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
@@ -103,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ArrayList<Ingredient> ingredients1 = new ArrayList<>();
         ArrayList<Ingredient> ingredients2 = new ArrayList<>();
+        patat.addAllergy("Gluten");
+        selder.addAllergy("Celery");
         ingredientList.add(wortel);
         ingredientList.add(selder);
         ingredientList.add(patat);
@@ -288,52 +268,90 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addMenu(View v){
         EditText name = findViewById(R.id.addMenuName);
         EditText desc = findViewById(R.id.addMenuDescription);
-        LinearLayout ingredients = findViewById(R.id.addMenuIngredientColunm);
-        LinearLayout ingredientsPrices = findViewById(R.id.addMenuPriceColunm);
+
 
         if (!name.getText().toString().isEmpty() && !desc.getText().toString().isEmpty()){
 
-                ArrayList<Ingredient> ingredientMenuList = new ArrayList<>();
-                ArrayList<String> names = new ArrayList<>();
-                ArrayList<Integer> priceList = new ArrayList<>();
+                   boolean menuExists = false;
+                   for (Menu mn:menuList){
+                       if (mn.getName().equals(name.getText().toString().trim())){
+                           menuExists = true;
+                       }
+                   }
 
-                for( int i = 0; i < ingredients.getChildCount(); i++) {
-                    if (ingredients.getChildAt(i) instanceof TextView) {
-                            priceList.add(Integer.parseInt(((TextView) ingredientsPrices.getChildAt(i)).getText().toString()));
-                            names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
+                   if (menuExists){
+                       Toast.makeText(this, "Menu already exists", Toast.LENGTH_LONG).show();
+                   } else {
+                       Menu m = new Menu();
+                       m.setName(name.getText().toString());
+                       m.setDescription(desc.getText().toString());
+                       menuList.add(m);
+                       Bundle args = new Bundle();
+                       args.putString("menuTitle", m.getName());
+                       GoToAddMenuIngredientFragment fragment = new GoToAddMenuIngredientFragment();
+                       fragment.setArguments(args);
+                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                   }
+        }
+    }
+
+    public void addMenuIngredients(View v){
+        LinearLayout ingredients = findViewById(R.id.addMenuIngredientColunm);
+        LinearLayout ingredientsPrices = findViewById(R.id.addMenuPriceColunm);
+        LinearLayout allergies = findViewById(R.id.invisibleAllergies);
+        TextView menuTitel = findViewById(R.id.menuTitle);
+
+        ArrayList<Ingredient> ingredientMenuList = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Integer> priceList = new ArrayList<>();
+        ArrayList<ArrayList> allergyList = new ArrayList<>();
+
+        for( int i = 0; i < ingredients.getChildCount(); i++) {
+            if (ingredients.getChildAt(i) instanceof TextView) {
+                priceList.add(Integer.parseInt(((TextView) ingredientsPrices.getChildAt(i)).getText().toString()));
+                names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
+                LinearLayout al = (LinearLayout) allergies.getChildAt(i);
+                ArrayList<String> stringAl = new ArrayList<>();
+                for (int j = 0; j < al.getChildCount(); j++){
+                    stringAl.add(((TextView)al.getChildAt(j)).getText().toString().trim());
+                }
+                allergyList.add(stringAl);
+            }
+        }
+
+
+        for (int i = 0; i<names.size(); i++){
+            boolean exists = false;
+            Ingredient existing = null;
+            Ingredient newIng = new Ingredient(names.get(i), priceList.get(i));
+            newIng.setAllergies(allergyList.get(i));
+            for (Ingredient ing:ingredientList){
+                if (ing.getName().equals(newIng.getName())){
+                    exists = true;
+                    existing = ing;
+                }
+            }
+            if (!exists){
+                ingredientMenuList.add(newIng);
+                ingredientList.add(newIng);
+            } else {
+                ingredientMenuList.add(existing);
+            }
+
+            if (ingredientMenuList.isEmpty()){
+                Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
+            } else {
+                for (Menu m:menuList){
+                    if (m.getName().equals(menuTitel.getText().toString().trim())){
+                        m.setIngredient(ingredientMenuList);
                     }
                 }
-
-
-                for (int i = 0; i<names.size(); i++){
-                    boolean exists = false;
-                    Ingredient existing = null;
-                    Ingredient newIng = new Ingredient(names.get(i), priceList.get(i));
-                    for (Ingredient ing:ingredientList){
-                        if (ing.getName().equals(newIng.getName())){
-                            exists = true;
-                            existing = ing;
-                        }
-                    }
-                    if (!exists){
-                        ingredientMenuList.add(newIng);
-                        ingredientList.add(newIng);
-                    } else {
-                        ingredientMenuList.add(existing);
-                    }
-                }
-
-               if (ingredientMenuList.isEmpty()){
-                    Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
-               } else {
-                   Menu m = new Menu(name.getText().toString(), ingredientMenuList, desc.getText().toString());
-                   menuList.add(m);
-                   Bundle args = new Bundle();
-                   args.putString("menuTitle", m.getName());
-                   GoToAddMenuFragmentRecipeFragment fragmentRecipe = new GoToAddMenuFragmentRecipeFragment();
-                   fragmentRecipe.setArguments(args);
-                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRecipe).addToBackStack(null).commit();
-               }
+            }
+            Bundle args = new Bundle();
+            args.putString("menuTitle", menuTitel.getText().toString().trim());
+            GoToAddMenuRecipeFragment fragment = new GoToAddMenuRecipeFragment();
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         }
     }
 
@@ -360,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
+
 
     //Add Picture to menu
     public void endPictureMenu(View v){
@@ -417,6 +436,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
+
+    //CheckBoxMethods
     public void onCheckboxClicked(View view) {
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
@@ -425,102 +446,101 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(view.getId()) {
             case R.id.checkbox_gluten:
                 if (checked){
-                   
+                   allergiesList.add("Gluten");
                 }
                 // Put some meat on the sandwich
             else
-                // Remove the meat
+                allergiesList.remove("Gluten");
                 break;
             case R.id.checkbox_shellfish:
                 if (checked){
-
+                    allergiesList.add("Shellfish");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Shellfish");
                 break;
             case R.id.checkbox_eggs:
                 if (checked){
-
+                    allergiesList.add("Eggs");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Eggs");
                 break;
             case R.id.checkbox_fish:
                 if (checked){
-
+                    allergiesList.add("Fish");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Fish");
                 break;
             case R.id.checkbox_peanut:
                 if (checked){
-
+                    allergiesList.add("Peanut");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Peanut");
                 break;
             case R.id.checkbox_soy:
                 if (checked){
-
+                    allergiesList.add("Cheese");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Cheese");
                 break;
             case R.id.checkbox_milk:
                 if (checked){
-
+                    allergiesList.add("Milk");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Milk");
                 break;
             case R.id.checkbox_nuts:
                 if (checked){
-
+                    allergiesList.add("Nuts");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Nuts");
                 break;
             case R.id.checkbox_celery:
                 if (checked){
-
+                    allergiesList.add("Celery");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Celery");
                 break;
             case R.id.checkbox_mustard:
                 if (checked){
-
+                    allergiesList.add("Mustard");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Mustard");
                 break;
             case R.id.checkbox_lupine:
                 if (checked){
-
+                    allergiesList.add("Lupine");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Lupine");
                 break;
             case R.id.checkbox_molluscs:
                 if (checked){
-
+                    allergiesList.add("Mollusc's");
                 }
                 // Cheese me
             else
-                // I'm lactose intolerant
+                    allergiesList.remove("Mollusc's");
                 break;
 
-            // TODO: Veggie sandwich
         }
     }
 }

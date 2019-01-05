@@ -127,4 +127,13 @@ public class Menu {
         this.imageToUpload = imageToUpload;
     }
 
+    public ArrayList<String> getAllergies(){
+        ArrayList<String> allergies = new ArrayList<>();
+
+        for (Ingredient i:ingredients){
+            allergies.addAll(i.getAllergies());
+        }
+        return allergies;
+    }
+
 }

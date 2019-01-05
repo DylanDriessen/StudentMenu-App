@@ -45,4 +45,10 @@ public class Ingredient {
 
     public void addAllergy(String allergy){ this.allergies.add(allergy); }
 
+    public ArrayList<String> getAllergies(){ return this.allergies; }
+
+    public void setAllergies(ArrayList<String> allergies) {
+        this.allergies = allergies;
+    }
+
 }

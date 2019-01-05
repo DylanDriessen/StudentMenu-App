@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Adapter.MenuAdapter;
@@ -17,6 +18,7 @@ import com.example.maartenvandenhof.studentmenu.Menu;
 import com.example.maartenvandenhof.studentmenu.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MenuPriceSearchFragment extends Fragment {
     double price;
@@ -30,15 +32,16 @@ public class MenuPriceSearchFragment extends Fragment {
         RecyclerView lv = view.findViewById(R.id.menuList);
 
         ArrayList<Menu> menuList = ((MainActivity)getActivity()).menuList;
+        ArrayList<String> allergies = ((MainActivity) getActivity()).allergiesList;
         ArrayList<Menu> adjustedList = new ArrayList<>();
         double price = getArguments().getDouble("price");
 
         for (Menu m : menuList){
-            if(m.getPrice() <= price){
+            if(m.getPrice() <= price && Collections.disjoint(m.getAllergies(), allergies)){
                 adjustedList.add(m);
             }
         }
-
+        ((MainActivity) getActivity()).allergiesList = new ArrayList<String>();
         MenuAdapter adapter = new MenuAdapter(getContext(), adjustedList);
         lv.setAdapter(adapter);
         lv.setLayoutManager(new LinearLayoutManager(getContext()));
