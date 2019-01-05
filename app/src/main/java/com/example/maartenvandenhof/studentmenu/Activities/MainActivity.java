@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    
+
 
     public void rateMe(View v){
         ratingBar = findViewById(R.id.ratingBar);
@@ -425,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(view.getId()) {
             case R.id.checkbox_gluten:
                 if (checked){
-                    Toast.makeText(this, "gluteeen", Toast.LENGTH_SHORT).show();
+                   
                 }
                 // Put some meat on the sandwich
             else
