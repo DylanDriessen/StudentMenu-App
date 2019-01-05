@@ -1,11 +1,23 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +25,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +50,19 @@ import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuOrdendListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.PriceOrdendListFragment;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import android.widget.AdapterView.OnItemSelectedListener;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,8 +74,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public RatingBar ratingBar;
     public ImageView imageToUpLoad;
     public Button bUploadImage;
+    public String mFilePath;
+    public String imgpath,storedpath;
+    public SharedPreferences sp;
     public ArrayList<Menu> sortedList;
-    public ArrayList<String> allergiesList;
+    public ArrayList<Menu> sortedPriceList;
+    private ArrayList<String> allergiesList;
+
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {
+            android.Manifest.permission.READ_CONTACTS,
+            android.Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_SMS,
+            android.Manifest.permission.CAMERA
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList.add(menu1);
         menuList.add(menu2);
 
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
 
-        //imageToUpLoad.setOnClickListener(this);
     }
 
     @Override
@@ -185,17 +222,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void sortRating(View v)  {
-        double rating = 5;
-        sortedList = new ArrayList<>();
-        for(int x = 0; x < menuList.size(); x++){
-            if( menuList.get(x).getRating() == rating){
-                sortedList.add(menuList.get(x));
-            }
-            rating = rating - 0.5;
+    public void sortPrice(View v){
+
+        sortedPriceList = new ArrayList<>();
+        sortedPriceList = menuList;
+        Collections.sort(sortedPriceList,PriceOrde);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PriceOrdendListFragment()).addToBackStack(null).commit();
+
+
+
+    }
+
+    public static Comparator<Menu> PriceOrde = new Comparator<Menu>() {
+        @Override
+        public int compare(Menu o1, Menu o2) {
+            int i = (int) Math.round(o1.getPrice()*100);
+            int j = (int) Math.round(o2.getPrice()*100);
+
+            int menu1 = i;
+            int menu2 = j;
+            return menu2 - menu1;
+
         }
+    };
+
+    public void sortRating(View v)  {
+
+        sortedList = new ArrayList<>();
+        sortedList = menuList;
+        Collections.sort(sortedList,MenuOrde);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
     }
+
+    //
+    public static Comparator<Menu> MenuOrde = new Comparator<Menu>() {
+        @Override
+        public int compare(Menu o1, Menu o2) {
+            int menu1 = o1.getRating();
+            int menu2 = o2.getRating();
+            return menu2 - menu1;
+        }
+    };
+
+
 
     //Show Menu description
     public void menuDescription(String menuTitle, String menuPrice, String menuRecipe, ArrayList<String> ingredientList){
@@ -376,7 +447,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentPicture.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).addToBackStack(null).commit();
         }
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
 
@@ -385,52 +455,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
-    public void onPickImage(View view) {
-        //Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        //startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    public void loadImagefromGallery(View view) {
         imageToUpLoad = (ImageView) findViewById(R.id.imageView);
-        bUploadImage = (Button) findViewById(R.id.bUploadImage);
-
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
-        TextView menuTitle = findViewById(R.id.addMenuTitle);
-        for (Menu m:menuList){
-            if (m.getName().equals(menuTitle.getText().toString())){
-                m.setImageToUpload(imageToUpLoad);
-            }
+        sp=getSharedPreferences("setback", MODE_PRIVATE);
+        if(sp.contains("imagepath")) {
+            storedpath=sp.getString("imagepath", "");
+            imageToUpLoad.setImageBitmap(BitmapFactory.decodeFile(storedpath));
         }
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //switch(requestCode) {
-        //    case PICK_IMAGE_ID:
-                //Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-        //        Uri selectedImage = data.getData();
-        //        imageToUpLoad.setImageURI(selectedImage);
-        //        break;
-        //    default:
-        //        super.onActivityResult(requestCode, resultCode, data);
-         //       break;
-        //}
-
         super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK && data != null){
-            Uri selectedImage = data.getData();
-            if(selectedImage != null) {
-                imageToUpLoad.setImageURI(selectedImage);
+        try {
+            // When an Image is picked
+            if (requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.MediaColumns.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgpath = cursor.getString(columnIndex);
+                Log.d("path", imgpath);
+                cursor.close();
+
+                SharedPreferences.Editor edit=sp.edit();
+                edit.putString("imagepath",imgpath);
+                edit.commit();
+
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgpath);
+
+                imageToUpLoad.setImageBitmap(myBitmap);
+                Log.d(TAG, "lijst " + myBitmap.toString());
             }
+            else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
         }
     }
-
-
 
     public void rateMe(View v){
         ratingBar = findViewById(R.id.ratingBar);
         TextView name = findViewById(R.id.menuDisplayTitle);
         for (Menu m:menuList){
             if (m.getName().equals(name.getText().toString())){
-                m.setRating(ratingBar.getRating());
+                m.setRating(Math.round(ratingBar.getRating()));
             }
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
@@ -543,4 +630,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }*/
 }
