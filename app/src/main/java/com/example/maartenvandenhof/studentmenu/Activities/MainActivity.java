@@ -53,23 +53,10 @@ import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuOrdendListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.PriceOrdendListFragment;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import static java.util.Comparator.comparing;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
-
-import android.widget.AdapterView.OnItemSelectedListener;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
