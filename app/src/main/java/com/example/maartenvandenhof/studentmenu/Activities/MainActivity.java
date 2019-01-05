@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public String imgpath,storedpath;
     public SharedPreferences sp;
     public ArrayList<Menu> sortedList;
+    public ArrayList<Menu> sortedPriceList;
     private ArrayList<String> allergiesList;
 
 
