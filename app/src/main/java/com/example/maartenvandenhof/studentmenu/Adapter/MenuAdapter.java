@@ -17,17 +17,20 @@ import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Menu;
 import com.example.maartenvandenhof.studentmenu.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickListener {
 
     Context myContext;
     List<Menu> menuData;
+    private static final String TAG = "Main Activity";
 
 
 
 
-    public MenuAdapter(Context myContext, List<Menu> menuData){
+
+    public MenuAdapter(Context myContext, ArrayList<Menu> menuData){
         this.myContext = myContext;
         this.menuData = menuData;
     }
@@ -60,8 +63,12 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
 
     @Override
     public int getItemCount() {
+       int i = 0;
+        if(menuData != null){
+            i = menuData.size();
+        }
 
-        return menuData.size();
+        return i;
     }
 
     @Override

@@ -49,6 +49,7 @@ import com.example.maartenvandenhof.studentmenu.Fragments.MenuListFragment;
 import com.example.maartenvandenhof.studentmenu.*;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuOrdendListFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
+import com.example.maartenvandenhof.studentmenu.Fragments.PriceOrdendListFragment;
 
 import org.w3c.dom.Text;
 
@@ -234,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sortedPriceList = new ArrayList<>();
         sortedPriceList = menuList;
         Collections.sort(sortedPriceList,PriceOrde);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PriceOrdendListFragment()).addToBackStack(null).commit();
 
 
 
