@@ -258,8 +258,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment.setArguments(args);
                 allergiesListWeek = new ArrayList<>();
                 allergiesListWeek = allergiesList;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
+                double sum = 0;
+                Menu smallest = menuList.get(0);
+                for (Menu m: menuList){
+                    for (Menu mn: menuList){
+                        if (mn.getPrice() < m.getPrice() && mn.getPrice() < smallest.getPrice()){
+                            smallest = mn;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < 5; i++){
+                    sum = sum + smallest.getPrice();
+                }
+
+                if (sum > price){
+                    Toast.makeText(this, "Your budget is too small", Toast.LENGTH_SHORT).show();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                }
             } catch (NumberFormatException e) {
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
                 t.show();
