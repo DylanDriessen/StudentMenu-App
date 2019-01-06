@@ -13,6 +13,7 @@ import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -66,9 +67,11 @@ import com.google.android.gms.tasks.Task;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -96,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
     public ArrayList<String> allergiesList;
-    public FireBasReading reading;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     public ArrayList<String> allergiesListWeek;
@@ -144,16 +146,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG,myRef.toString());
         Log.d(TAG,database.toString());
 
-        myRef.child("menu").child("menu1").child("price").setValue("30");
-        myRef.child("menu").child("menu1").child("lol").setValue("u mama");
-        myRef.child("menu").child("menu2").child("u mama").setValue("u mama");
+
 
         myRef.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG,database.toString());
+
                 showData(dataSnapshot);
+
             }
 
             @Override
@@ -203,16 +205,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ingredients2.add(sla);
         ingredients2.add(selder);
 
-        Menu menu1 = new Menu("Patat me wortelen", ingredients1);
-        Menu menu2 = new Menu("Selder me sla", ingredients2);
-        menu1.setDescription("Wa wortelen me een paar goeie patatten, kan ni slecht zijn");
-        menu2.setDescription("Selder en sla zijn fucking gezond, gewoon eten");
-        menu1.setRecipe("Kook u patatten, schil u wortelen en smijt ze dan bij elkaar." +
-                "Laat nog effe koken en eet dan op.");
-        menu2.setRecipe("Heel eenvoudig recept, kuis u selder, kuis u sla en gooi het in ne schone pot, dan is u eten klaar");
 
-        menuList.add(menu1);
-        menuList.add(menu2);
+
+
+
 
         ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -230,22 +226,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showData(DataSnapshot snapshot){
 
 
-            /*for(DataSnapshot ds: snapshot.getChildren()) {
-                Menu menu = new Menu();
-                menu.setName(ds.getValue(Menu.class).getName());
-                menu.setIngredient(ds.getValue(Menu.class).getIngredientsString());
-                menu.setDescription(ds.getValue(Menu.class).getDescription());
-                menu.setRecipe(ds.getValue(Menu.class).getRecipe());
-                menu.setRating(ds.getValue(Menu.class).getRating());
-                menu.setPrice(ds.getValue(Menu.class).getPrice());
+
+
+        menuList = new ArrayList<>();
+        for(DataSnapshot ds: snapshot.getChildren()) {
+            for (DataSnapshot d : ds.getChildren()) {
+                if(d != null){
+                    Menu menu = new Menu();
+
+                    String name = (String) d.child("name").getValue();
+                    String description = (String) d.child("description").getValue();
+                    String recipe = (String) d.child("recipe").getValue();
+                    ArrayList<Ingredient> ingredients = new ArrayList<>();
+                    for(DataSnapshot dk: d.child("ingredient").getChildren()){
+
+                        String price =  dk.child("price").getValue().toString();
+                        String nameIngredient = (String) dk.child("name").getValue();
+                        Ingredient ing = new Ingredient(nameIngredient,Double.parseDouble(price));
+                        ingredients.add(ing);
+                    }
+
+                    try {
+                        String price = d.child("price").getValue().toString();
+                        menu.setPrice(Double.parseDouble(price));
+
+                    }
+                    catch(Exception e){
+                        Toast.makeText(this, "Prijs mag niet 0 zijn",Toast.LENGTH_LONG).show();
+                        }
+                        try{
+                            String rating = d.child("rating").getValue().toString();
+                            menu.setRating(Integer.parseInt(rating));
+
+                        }
+                        catch(Exception e){
+                            menu.setRating(0);
+                        }
+
+
+                    menu.setName(name);
+                    menu.setRecipe(recipe);
+                    menu.setDescription(description);
+                    menu.setIngredients(ingredients);
+
+                    menuList.add(menu);
 
 
 
-                Log.d(TAG, menu.getName());
+                }
 
-            }*/
-            
+            }
         }
+    }
+
+
 
 
 
@@ -643,6 +677,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Menu m : menuList) {
             if (m.getName().equals(menuTitle.getText().toString())) {
                 m.setRecipe(recipe.getText().toString());
+
                 myRef.child("menu").child(m.getName()).child("name").setValue(m.getName());
                 myRef.child("menu").child(m.getName()).child("ingredient").setValue(m.getIngredient());
                 myRef.child("menu").child(m.getName()).child("price").setValue(m.getPrice());
@@ -659,7 +694,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Bundle args = new Bundle();
             args.putString("menuTitle", m1.getName());
-            Log.d(TAG, m1.getName());
             GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
             fragmentPicture.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).commit();
@@ -734,8 +768,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Menu m : menuList) {
             if (m.getName().equals(name.getText().toString())) {
                 m.setRating(Math.round(ratingBar.getRating()));
+                myRef.child("menu").child(m.getName()).child("rating").setValue(m.getRating());
             }
         }
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
     }
 
