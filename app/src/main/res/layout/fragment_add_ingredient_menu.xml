@@ -55,7 +55,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/add_ingredient"
                         android:inputType="text"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:maxLength="50"/>
 
                     <EditText
                         android:id="@+id/menuAddIngredientPrice"
@@ -63,7 +64,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/price"
                         android:inputType="numberDecimal"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:maxLength="50"/>
 
                 </LinearLayout>
 
