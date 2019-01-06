@@ -22,10 +22,12 @@ import com.example.maartenvandenhof.studentmenu.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickListener {
+public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickListener, Filterable {
 
     private Context myContext;
     private List<Menu> menuData;
+    private List<Menu> menuDataFull;
+    private static final String TAG = "Main Activity";
 
 
 
@@ -34,6 +36,7 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
     public MenuAdapter(Context myContext, ArrayList<Menu> menuData){
         this.myContext = myContext;
         this.menuData = menuData;
+        this.menuDataFull = new ArrayList<>(menuData);
     }
 
     @NonNull
@@ -76,6 +79,42 @@ public class MenuAdapter extends RecyclerView.Adapter implements View.OnClickLis
     public void onClick(View view) {
 
     }
+
+    @Override
+    public Filter getFilter() {
+        return menuDataFilter;
+    }
+
+    //Search
+    private Filter menuDataFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Menu> filterdList = new ArrayList<>();
+
+            if (charSequence == null || charSequence.length() == 0){
+                filterdList.addAll(menuDataFull);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for (Menu m:menuDataFull){
+                    if (m.getName().toLowerCase().contains(filterPattern)){
+                        filterdList.add(m);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filterdList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            menuData.clear();
+            menuData.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     public class myViewHolder extends RecyclerView.ViewHolder{
