@@ -746,6 +746,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             Bundle args = new Bundle();
             args.putString("menuTitle", m1.getName());
+            Log.d(TAG, "TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST: " + m1.getName());
             GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
             fragmentPicture.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentPicture).commit();
