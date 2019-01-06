@@ -135,8 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
-        Log.d(TAG,myRef.toString());
-        Log.d(TAG,database.toString());
+
 
 
 
