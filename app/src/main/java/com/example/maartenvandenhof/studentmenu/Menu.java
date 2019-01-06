@@ -22,6 +22,7 @@ public class Menu {
     private double price = 0;
     private int rating;
     private ImageView imageToUpload;
+    private ArrayList<String> ingedrientsDataBase;
 
     public Menu(String name, ArrayList<Ingredient> ingredients, double price, String recipe, ImageView imageToUpload) {
         this.name = name;
@@ -47,12 +48,48 @@ public class Menu {
         setRecipe("N/A");
     }
 
+
+
     public Menu(String name, ArrayList<Ingredient> ingredients) {
         this.name = name;
         this.ingredients = ingredients;
         this.price = getPrice();
         setRecipe("N/A \n \n \n Test Test Test");
     }
+
+
+
+
+
+
+
+    public Menu( ArrayList<String> ingedrientsDataBase, String name, double price, String recipe, ImageView imageToUpload) {
+        this.name = name;
+        this.ingedrientsDataBase = ingedrientsDataBase;
+        this.price = price;
+        this.imageToUpload = imageToUpload;
+        setRecipe(recipe);
+    }
+
+    public Menu(ArrayList<String> ingedrientsDataBase,String name, double price) {
+
+        this.name = name;
+        this.ingedrientsDataBase = ingedrientsDataBase;
+        this.price = price;
+        setRecipe("N/A");
+    }
+
+    public Menu(ArrayList<String> ingedrientsDataBase, String name,  String description) {
+
+        this.name = name;
+        this.ingedrientsDataBase = ingedrientsDataBase;
+        this.description = description;
+        setRecipe("N/A");
+    }
+
+
+
+
 
     public Menu(){
         setRecipe("N/A \n \n \n Test Test Test");
@@ -68,6 +105,8 @@ public class Menu {
     }
 
     public ArrayList<Ingredient> getIngredient() {
+
+
         return ingredients;
     }
 
@@ -78,8 +117,10 @@ public class Menu {
         }
         return list;
     }
-    public void setIngredient(ArrayList<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setIngredient(ArrayList<String> ingedrientsDataBase)
+
+    {
+        this.ingedrientsDataBase = ingedrientsDataBase;
     }
 
     public String getDescription() {

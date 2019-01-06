@@ -51,6 +51,7 @@ import com.example.maartenvandenhof.studentmenu.Fragments.MenuOrdendListFragment
 import com.example.maartenvandenhof.studentmenu.Fragments.MenuPriceSearchFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.PriceOrdendListFragment;
 
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -59,11 +60,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import android.widget.AdapterView.OnItemSelectedListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "Main Activity";
+    private static final String TAG = "TEST10";
     private static final int PICK_IMAGE_ID = 234 ;
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
@@ -77,6 +83,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
     private ArrayList<String> allergiesList;
+    public FireBasReading reading;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
+
+
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {
+            android.Manifest.permission.READ_CONTACTS,
+            android.Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_SMS,
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.INTERNET
+    };
+
 
 
     /*private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -89,6 +112,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+
+        Log.d(TAG,myRef.toString());
+        Log.d(TAG,database.toString());
+
+        myRef.child("menu").child("menu1").child("price").setValue("30");
+        myRef.child("menu").child("menu1").child("lol").setValue("u mama");
+        myRef.child("menu").child("menu2").child("u mama").setValue("u mama");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG,database.toString());
+                showData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -150,10 +197,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList.add(menu2);
 
 
-
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
 
         //imageToUpLoad.setOnClickListener(this);
     }
+
+
+
+    private void showData(DataSnapshot snapshot){
+
+
+            /*for(DataSnapshot ds: snapshot.getChildren()) {
+                Menu menu = new Menu();
+                menu.setName(ds.getValue(Menu.class).getName());
+                menu.setIngredient(ds.getValue(Menu.class).getIngredientsString());
+                menu.setDescription(ds.getValue(Menu.class).getDescription());
+                menu.setRecipe(ds.getValue(Menu.class).getRecipe());
+                menu.setRating(ds.getValue(Menu.class).getRating());
+                menu.setPrice(ds.getValue(Menu.class).getPrice());
+
+
+
+                Log.d(TAG, menu.getName());
+
+            }*/
+            
+        }
+
+
 
     @Override
     public void onBackPressed() {
@@ -184,6 +255,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast notImplemented = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG);
         switch (menuItem.getItemId()) {
             case R.id.ml:
+
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.db:
@@ -203,6 +276,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
 
     //Search Menu Button
     public void searchMenuPrice(View v){
@@ -329,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast t = Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT);
             t.show();
         }
+
+
     }
 
     //Add Menu
