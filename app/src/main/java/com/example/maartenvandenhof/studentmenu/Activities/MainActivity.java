@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
@@ -22,8 +24,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -62,6 +66,7 @@ import com.google.android.gms.tasks.Task;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -69,6 +74,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
 import android.widget.AdapterView.OnItemSelectedListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -101,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public double lon;
     public GoogleMap mGoogleMap;
     public LatLngBounds mMapBoundary;
+    public EditText mSearchText;
 
 
 
@@ -208,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
 
         //imageToUpLoad.setOnClickListener(this);
+
+
     }
 
 
@@ -916,5 +926,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+    /*public void init(){
+        Log.d(TAG, "init: initializing");
+
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                    //execute our method for searching
+                    geoLocate();
+                }
+                return false;
+            }
+        });
+    }
+
+    public void geoLocate(){
+        Log.d(TAG, "geoLocate: geolocating");
+
+        String searchString = mSearchText.getText().toString();
+        Geocoder geocoder = new Geocoder(MainActivity.this);
+        List<Address> list = new ArrayList<>();
+        try{
+            list = geocoder.getFromLocationName(searchString, 1);
+        }catch (IOException e){
+            Log.d(TAG, "geoLocate: IOException: " + e.getMessage());
+        }
+
+        if(list.size() > 0){
+            Address address = list.get(0);
+            Log.d(TAG, "geoLocate found location" + address.toString());
+        }
+    }*/
 }
 
