@@ -20,12 +20,32 @@ import com.example.maartenvandenhof.studentmenu.R;
 import java.io.File;
 
 public class GoToAddMenuPictureFragment extends Fragment {
+
+    public Button btnChoose, btnUpload;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_picture, container, false);
         TextView title = v.findViewById(R.id.addMenuTitle);
         title.setText(getArguments().get("menuTitle").toString());
+        btnChoose = (Button) v.findViewById(R.id.bSelectloadImage);
+        btnUpload = (Button) v.findViewById(R.id.bUploadImage2);
+        ((MainActivity)getActivity()).imageView = (ImageView) v.findViewById(R.id.imageView);
+
+        btnChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).chooseImage();
+            }
+        });
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).uploadImage();
+            }
+        });
         return v;
     }
 }

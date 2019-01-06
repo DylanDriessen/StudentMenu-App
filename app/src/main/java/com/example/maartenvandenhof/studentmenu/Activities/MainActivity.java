@@ -1,6 +1,7 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -61,20 +62,25 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 import android.widget.AdapterView.OnItemSelectedListener;
 import com.google.firebase.database.DataSnapshot;
@@ -82,6 +88,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -109,6 +119,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public GoogleMap mGoogleMap;
     public LatLngBounds mMapBoundary;
     public EditText mSearchText;
+    public StorageReference referenceStorage;
+    public FirebaseStorage storage;
+    public StorageReference storageReference;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri filePath;
+    private Button btnChoose, btnUpload;
+    public ImageView imageView;
+
+
 
 
 
@@ -138,6 +157,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         setContentView(R.layout.activity_home_screen);
 
         database = FirebaseDatabase.getInstance();
@@ -216,6 +239,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
 
         //imageToUpLoad.setOnClickListener(this);
+
+
+
 
 
     }
@@ -691,6 +717,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (recipe.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
         } else {
+
+
             Bundle args = new Bundle();
             args.putString("menuTitle", m1.getName());
             GoToAddMenuPictureFragment fragmentPicture = new GoToAddMenuPictureFragment();
@@ -702,63 +730,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Add Picture to menu
     public void endPictureMenu(View v) {
+        uploadImage();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
+
     }
 
-    public void loadImagefromGallery(View view) {
-        imageToUpLoad = (ImageView) findViewById(R.id.imageView);
-        sp = getSharedPreferences("setback", MODE_PRIVATE);
-        if (sp.contains("imagepath")) {
-            storedpath = sp.getString("imagepath", "");
-            imageToUpLoad.setImageBitmap(BitmapFactory.decodeFile(storedpath));
+    public void uploadImage() {
+        if(filePath != null)
+
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
         }
-        // Create intent to Open Image applications like Gallery, Google Photos
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // Start the Intent
-        startActivityForResult(galleryIntent, PICK_IMAGE_ID);
     }
+
+
+
+    public void chooseImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        try {
-            // When an Image is picked
-            if (requestCode == PICK_IMAGE_ID && resultCode == RESULT_OK
-                    && null != data) {
-                // Get the Image from data
 
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.MediaColumns.DATA};
-
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
-                // Move to first row
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                imgpath = cursor.getString(columnIndex);
-                Log.d("path", imgpath);
-                cursor.close();
-
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString("imagepath", imgpath);
-                edit.commit();
-
-
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgpath);
-
-                imageToUpLoad.setImageBitmap(myBitmap);
-                Log.d(TAG, "lijst " + myBitmap.toString());
-            } else {
-                Toast.makeText(this, "You haven't picked Image",
-                        Toast.LENGTH_LONG).show();
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                 imageView.setImageBitmap(bitmap);
             }
-        } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
-                    .show();
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
+
+
     }
 
     public void rateMe(View v) {
