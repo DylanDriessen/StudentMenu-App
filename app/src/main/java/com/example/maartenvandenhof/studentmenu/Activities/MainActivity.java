@@ -1008,9 +1008,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         lat = location.getLatitude();
                         lon = location.getLongitude();
                     }else{
-                        geoPoint = new GeoPoint(50,50);
-                        lat = 50;
-                        lon = 50;
+                        geoPoint = new GeoPoint(50.845847,4.728128);
+                        lat = 50.845847;
+                        lon = 4.728128;
                     }
                     Log.d(TAG, "onComplete: latitude: " + geoPoint.getLat());
                     Log.d(TAG, "onComplete: longtitude: " + geoPoint.getLon());
