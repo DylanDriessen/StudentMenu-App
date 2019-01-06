@@ -250,6 +250,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         String price =  dk.child("price").getValue().toString();
                         String nameIngredient = (String) dk.child("name").getValue();
+                        ArrayList<String> allergies = new ArrayList<>();
+                        for(DataSnapshot ds: dk.child("allergies").getChildren()){
+                            String allergy = (String) ds.getValue();
+                            allergies.add(allergy);
+                        }
+
                         Ingredient ing = new Ingredient(nameIngredient,Double.parseDouble(price));
                         ingredients.add(ing);
                     }
@@ -727,6 +733,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 myRef.child("menu").child(tempMenu.getName()).child("rating").setValue(tempMenu.getRating());
                 myRef.child("menu").child(tempMenu.getName()).child("description").setValue(tempMenu.getDescription());
                 myRef.child("menu").child(tempMenu.getName()).child("recipe").setValue(tempMenu.getRecipe());
+
+
+                for(int i = 0; i < tempMenu.getIngredient().size(); i++){
+                    try{
+                        myRef.child("menu").child(tempMenu.getName()).child("ingredient").child(tempMenu.getIngredient().get(i).toString()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
+                    } catch (Exception e){
+                        
+                    }
+                }
+
         if (recipe.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
         } else {
