@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.R;
 
-public class GoToAddMenuFragmentRecipeFragment extends Fragment {
+public class GoToAddMenuRecipeFragment extends Fragment {
     private LinearLayout mLayout;
     private EditText name;
     private EditText price;

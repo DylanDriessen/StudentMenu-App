@@ -28,51 +28,8 @@ public class GoToAddMenuFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_menu, container, false);
 
-        ingredientC = (LinearLayout) v.findViewById(R.id.addMenuIngredientColunm);
-        priceC = (LinearLayout) v.findViewById(R.id.addMenuPriceColunm);
-        name = (EditText) v.findViewById(R.id.menuAddIngredientName);
-        price = (EditText) v.findViewById(R.id.menuAddIngredientPrice);
-        mButton = (Button) v.findViewById(R.id.addIngredientButton);
-        mButton.setOnClickListener(onClick());
-        TextView textView = new TextView((MainActivity)getActivity());
-        textView.setText("New text");
-
-
         return v;
     }
 
-    private View.OnClickListener onClick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean ingredientExists = false;
-                for( int i = 0; i < ingredientC.getChildCount(); i++) {
-                    if (ingredientC.getChildAt(i) instanceof TextView) {
-                        if (((TextView) ingredientC.getChildAt(i)).getText().equals(name.getText().toString().trim())) {
-                            ingredientExists = true;
-                        }
-                    }
-                }
 
-                if (!ingredientExists && !name.getText().toString().isEmpty() && !price.getText().toString().isEmpty()){
-                    ingredientC.addView(createNewTextView(name.getText().toString()));
-                    priceC.addView(createNewTextView(price.getText().toString()));
-                }
-                if (name.getText().toString().isEmpty() || price.getText().toString().isEmpty()){
-                    Toast.makeText((MainActivity)getActivity(), "Fill in a name and price", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast t = Toast.makeText((MainActivity)getActivity(), "Ingredient already added", Toast.LENGTH_SHORT);
-                    t.show();
-                }
-            }
-        };
-    }
-
-    private TextView createNewTextView(String text) {
-        final TextView textView = new TextView((MainActivity)getActivity());
-        textView.setText(text);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textView.setTextSize(20);
-        return textView;
-    }
 }
