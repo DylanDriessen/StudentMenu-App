@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 
 public class MenuListFragment extends Fragment {
-
+    private MenuAdapter adapter;
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
     @Nullable
@@ -37,7 +37,7 @@ public class MenuListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
         RecyclerView lv = (RecyclerView)view.findViewById(R.id.menuList);
 
-        MenuAdapter adapter = new MenuAdapter(getContext(), ((MainActivity)getActivity()).menuList);
+        adapter = new MenuAdapter(getContext(), ((MainActivity)getActivity()).menuList);
         lv.setAdapter(adapter);
         lv.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -65,15 +65,12 @@ public class MenuListFragment extends Fragment {
             queryTextListener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    Log.i("onQueryTextChange", newText);
-
-                    return true;
+                        adapter.getFilter().filter(newText);
+                    return false;
                 }
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    Log.i("onQueryTextSubmit", query);
-
-                    return true;
+                    return false;
                 }
             };
             searchView.setOnQueryTextListener(queryTextListener);

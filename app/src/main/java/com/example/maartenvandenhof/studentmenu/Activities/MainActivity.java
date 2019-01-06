@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Uri filePath;
     private Button btnChoose, btnUpload;
     public ImageView imageView;
+    public Menu tempMenu;
     //public StorageReference storageRef;
 
 
@@ -176,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG,database.toString());
-
                 showData(dataSnapshot);
 
             }
@@ -207,26 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         allergiesList = new ArrayList<>();
         weekMenus = new ArrayList<>();
 
-        //Dummy menu's aanmaken
-        Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
-        Ingredient selder = new Ingredient("Selder", 1, "Kunt ge soep van maken.");
-        Ingredient patat = new Ingredient("Patat", 6, "Perfect voor puree.");
-        Ingredient sla = new Ingredient("Sla", 3, "Alleen voor konijnen.");
-
-        ArrayList<Ingredient> ingredients1 = new ArrayList<>();
-        ArrayList<Ingredient> ingredients2 = new ArrayList<>();
-        patat.addAllergy("Gluten");
-        selder.addAllergy("Celery");
-        ingredientList.add(wortel);
-        ingredientList.add(selder);
-        ingredientList.add(patat);
-        ingredientList.add(sla);
 
 
-        ingredients1.add(wortel);
-        ingredients1.add(patat);
-        ingredients2.add(sla);
-        ingredients2.add(selder);
+
 
 
 
@@ -250,11 +233,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
+        ingredientList = new ArrayList<>();
         menuList = new ArrayList<>();
-        for(DataSnapshot ds: snapshot.getChildren()) {
-            for (DataSnapshot d : ds.getChildren()) {
-                if(d != null){
+        for(DataSnapshot d: snapshot.child("menu").getChildren()) {
+            Log.d(TAG,snapshot.child("menu").toString());
+
+
+            if(d != null){
                     Menu menu = new Menu();
 
                     String name = (String) d.child("name").getValue();
@@ -275,7 +260,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                     catch(Exception e){
-                        Toast.makeText(this, "Prijs mag niet 0 zijn",Toast.LENGTH_LONG).show();
+                        if (!name.equals("update")){
+                            Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".",Toast.LENGTH_LONG).show();
+                        }
                         }
                         try{
                             String rating = d.child("rating").getValue().toString();
@@ -296,11 +283,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+                 }
+
                 }
 
+
+
+                for(DataSnapshot ds: snapshot.child("ingedrients").getChildren()) {
+                    if (ds != null) {
+
+                        Ingredient ingredient = new Ingredient();
+                        String description = (String) ds.child("description").getValue();
+                        String name = (String) ds.child("name").getValue();
+                        try {
+                            String price = ds.child("price").getValue().toString();
+                            ingredient.setPrice(Double.parseDouble(price));
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".", Toast.LENGTH_LONG).show();
+
+                        }
+
+                        ingredient.setName(name);
+                        ingredient.setDescription(description);
+
+                        ingredientList.add(ingredient);
+
+                    }
+                }
             }
-        }
-    }
+
 
 
 
@@ -311,6 +322,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
+            myRef.child("menu").child("update").child("name").setValue("update");
+            myRef.child("menu").child("update").removeValue();
             getSupportFragmentManager().popBackStack();
         }
     }
@@ -334,8 +348,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast notImplemented = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG);
         switch (menuItem.getItemId()) {
             case R.id.ml:
-
-
+                myRef.child("menu").child("update").child("name").setValue("update");
+                myRef.child("menu").child("update").removeValue();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.db:
@@ -523,6 +537,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Add Ingredient
     public void goToAddIngredient(View v) {
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoToAddIngredientFragment()).addToBackStack(null).commit();
     }
 
@@ -544,6 +560,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 for (Ingredient in : ingredientList) {
                     if (in.getName().equals(name.getText().toString().trim())) {
                         exists = true;
+
                     }
                 }
 
@@ -567,6 +584,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast t = Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT);
             t.show();
         }
+
+
+
     }
 
     public void addIngredientWithAllergies(View v) {
@@ -574,6 +594,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Ingredient i:ingredientList){
             if (i.getName().equals(title.getText().toString().trim())){
                 i.setAllergies(allergiesList);
+
+                myRef.child("ingedrients").child(i.getName()).child("description").setValue(i.getName());
+                myRef.child("ingedrients").child(i.getName()).child("price").setValue(i.getPrice());
+                myRef.child("ingedrients").child(i.getName()).child("name").setValue(i.getName());
+                myRef.child("ingedrients").child(i.getName()).child("allergies").setValue(i.getAllergies());
+
+
+
             }
         }
         allergiesList = new ArrayList<>();
@@ -610,12 +638,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (menuExists) {
                 Toast.makeText(this, "Menu already exists", Toast.LENGTH_LONG).show();
             } else {
-                Menu m = new Menu();
-                m.setName(name.getText().toString());
-                m.setDescription(desc.getText().toString());
-                menuList.add(m);
+                tempMenu = new Menu();
+                tempMenu.setName(name.getText().toString());
+                tempMenu.setDescription(desc.getText().toString());
                 Bundle args = new Bundle();
-                args.putString("menuTitle", m.getName());
+                args.putString("menuTitle", tempMenu.getName());
                 GoToAddMenuIngredientFragment fragment = new GoToAddMenuIngredientFragment();
                 fragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -674,11 +701,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (ingredientMenuList.isEmpty()) {
                     Toast.makeText(this, "Please add ingredients", Toast.LENGTH_LONG).show();
                 } else {
-                    for (Menu m : menuList) {
-                        if (m.getName().equals(menuTitel.getText().toString().trim())) {
-                            m.setIngredients(ingredientMenuList);
-                        }
-                    }
+                    tempMenu.setIngredients(ingredientMenuList);
                 }
 
             }
@@ -695,23 +718,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addMenuWithDescription(View v) {
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
-        Menu m1 = new Menu();
-
-        for (Menu m : menuList) {
-            if (m.getName().equals(menuTitle.getText().toString())) {
-                m.setRecipe(recipe.getText().toString());
-
-                myRef.child("menu").child(m.getName()).child("name").setValue(m.getName());
-                myRef.child("menu").child(m.getName()).child("ingredient").setValue(m.getIngredient());
-                myRef.child("menu").child(m.getName()).child("price").setValue(m.getPrice());
-                myRef.child("menu").child(m.getName()).child("rating").setValue(m.getRating());
-                myRef.child("menu").child(m.getName()).child("description").setValue(m.getDescription());
-                myRef.child("menu").child(m.getName()).child("recipe").setValue(m.getRecipe());
-
-
-                m1 = m;
-            }
-        }
+        Menu m1 = tempMenu;
+        menuList.add(tempMenu);
+                tempMenu.setRecipe(recipe.getText().toString());
+                myRef.child("menu").child(tempMenu.getName()).child("name").setValue(tempMenu.getName());
+                myRef.child("menu").child(tempMenu.getName()).child("ingredient").setValue(tempMenu.getIngredient());
+                myRef.child("menu").child(tempMenu.getName()).child("price").setValue(tempMenu.getPrice());
+                myRef.child("menu").child(tempMenu.getName()).child("rating").setValue(tempMenu.getRating());
+                myRef.child("menu").child(tempMenu.getName()).child("description").setValue(tempMenu.getDescription());
+                myRef.child("menu").child(tempMenu.getName()).child("recipe").setValue(tempMenu.getRecipe());
         if (recipe.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
         } else {
