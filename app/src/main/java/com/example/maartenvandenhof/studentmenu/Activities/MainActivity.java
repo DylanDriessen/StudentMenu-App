@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Uri filePath;
     private Button btnChoose, btnUpload;
     public ImageView imageView;
+    //public StorageReference storageRef;
 
 
 
@@ -240,10 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //imageToUpLoad.setOnClickListener(this);
 
-
-
-
-
+        //storageRef = FirebaseStorage.getInstance().getReference();
     }
 
 
@@ -751,6 +749,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -790,6 +790,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 && data != null && data.getData() != null )
         {
             filePath = data.getData();
+            /*StorageReference imagePath;
+            imagePath = storageRef.child("images").child(filePath.getLastPathSegment());
+            imagePath.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                }
+            });*/
+
+            //storageRef.child("images").child(filePath.getLastPathSegment()).getDownloadUrl();
+            //Log.d(TAG, "Geef laatste string" + storageRef.toString());
+
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                  imageView.setImageBitmap(bitmap);
