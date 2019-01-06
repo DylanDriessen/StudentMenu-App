@@ -65,12 +65,18 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import android.widget.AdapterView.OnItemSelectedListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "Main Activity";
-    private static final int PICK_IMAGE_ID = 234;
+    private static final String TAG = "TEST10";
+    private static final int PICK_IMAGE_ID = 234 ;
     private DrawerLayout drawer;
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
@@ -83,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
     public ArrayList<String> allergiesList;
+    public FireBasReading reading;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
     public ArrayList<String> allergiesListWeek;
     public ArrayList<Menu> weekMenus;
     public FusedLocationProviderClient mFusedLocationClient;
@@ -92,10 +101,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public LatLngBounds mMapBoundary;
 
 
+
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
             android.Manifest.permission.READ_CONTACTS,
             android.Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_SMS,
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.INTERNET
+    };
+
+
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.READ_SMS,
@@ -108,6 +129,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+
+        Log.d(TAG,myRef.toString());
+        Log.d(TAG,database.toString());
+
+        myRef.child("menu").child("menu1").child("price").setValue("30");
+        myRef.child("menu").child("menu1").child("lol").setValue("u mama");
+        myRef.child("menu").child("menu2").child("u mama").setValue("u mama");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG,database.toString());
+                showData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -165,7 +210,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastKnowLocation();
 
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+
+        //imageToUpLoad.setOnClickListener(this);
     }
+
+
+
+    private void showData(DataSnapshot snapshot){
+
+
+            /*for(DataSnapshot ds: snapshot.getChildren()) {
+                Menu menu = new Menu();
+                menu.setName(ds.getValue(Menu.class).getName());
+                menu.setIngredient(ds.getValue(Menu.class).getIngredientsString());
+                menu.setDescription(ds.getValue(Menu.class).getDescription());
+                menu.setRecipe(ds.getValue(Menu.class).getRecipe());
+                menu.setRating(ds.getValue(Menu.class).getRating());
+                menu.setPrice(ds.getValue(Menu.class).getPrice());
+
+
+
+                Log.d(TAG, menu.getName());
+
+            }*/
+            
+        }
+
+
 
     @Override
     public void onBackPressed() {
@@ -195,6 +267,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast notImplemented = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG);
         switch (menuItem.getItemId()) {
             case R.id.ml:
+
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.db:
@@ -218,6 +292,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
 
     //Search Menu Button
     public void searchMenuPrice(View v) {
@@ -264,8 +342,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment.setArguments(args);
                 allergiesListWeek = new ArrayList<>();
                 allergiesListWeek = allergiesList;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
+                double sum = 0;
+                Menu smallest = menuList.get(0);
+                for (Menu m: menuList){
+                    for (Menu mn: menuList){
+                        if (mn.getPrice() < m.getPrice() && mn.getPrice() < smallest.getPrice()){
+                            smallest = mn;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < 5; i++){
+                    sum = sum + smallest.getPrice();
+                }
+
+                if (sum > price){
+                    Toast.makeText(this, "Your budget is too small", Toast.LENGTH_SHORT).show();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                }
             } catch (NumberFormatException e) {
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
                 t.show();
@@ -400,6 +496,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast t = Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT);
             t.show();
         }
+
+
     }
 
     //Add Menu
@@ -498,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     for (Menu m : menuList) {
                         if (m.getName().equals(menuTitel.getText().toString().trim())) {
-                            m.setIngredient(ingredientMenuList);
+                            m.setIngredients(ingredientMenuList);
                         }
                     }
                 }
@@ -522,6 +620,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Menu m : menuList) {
             if (m.getName().equals(menuTitle.getText().toString())) {
                 m.setRecipe(recipe.getText().toString());
+                myRef.child("menu").child(m.getName()).child("name").setValue(m.getName());
+                myRef.child("menu").child(m.getName()).child("ingredient").setValue(m.getIngredient());
+                myRef.child("menu").child(m.getName()).child("price").setValue(m.getPrice());
+                myRef.child("menu").child(m.getName()).child("rating").setValue(m.getRating());
+                myRef.child("menu").child(m.getName()).child("description").setValue(m.getDescription());
+                myRef.child("menu").child(m.getName()).child("recipe").setValue(m.getRecipe());
+
+
                 m1 = m;
             }
         }
