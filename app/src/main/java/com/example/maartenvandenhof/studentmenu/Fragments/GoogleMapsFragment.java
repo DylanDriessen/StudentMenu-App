@@ -17,13 +17,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
+import com.example.maartenvandenhof.studentmenu.PlaceAutocompleteAdapter;
 import com.example.maartenvandenhof.studentmenu.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,13 +43,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
+public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     private FragmentActivity myContext;
     private static final String TAG = "GoogleMap Fragment";
     public GoogleMap mMap;
     public LatLngBounds mMapBoundary;
-    public EditText mSearchText;
+    public AutoCompleteTextView mSearchText;
+    public PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
+    public GoogleApiClient mGoogleApiClient;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71,136));
 
     //private FusedLocationProviderClient mFusedLocationClient;
 
@@ -56,7 +66,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_google_maps, container, false);
-        mSearchText = (EditText) v.findViewById(R.id.input_search);
+        mSearchText = (AutoCompleteTextView) v.findViewById(R.id.input_search);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -112,6 +122,24 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
     public void init(){
         Log.d(TAG, "init: initializing");
 
+        //mGoogleApiClient = new GoogleApiClient.Builder((MainActivity)getContext()).addApi(Places.GEO_DATA_API).addApi(Places.PLACE_DETECTION_API).enableAutoManage((MainActivity)getContext(),this).build();
+
+        //mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter((MainActivity)getContext(), mGoogleApiClient, LAT_LNG_BOUNDS, null);
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder((MainActivity)getContext())
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage((MainActivity)getContext(), this)
+                .build();
+
+        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter((MainActivity)getContext(), Places.getGeoDataClient(getContext().getApplicationContext()),
+                LAT_LNG_BOUNDS, null);
+
+        //mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(getContext(), Places.getGeoDataClient(getContext(), null), LAT_LNG_BOUNDS, null);
+
+        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
+
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -128,5 +156,10 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         MarkerOptions options = new MarkerOptions().position(latLng).title(title);
         mMap.addMarker(options);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
