@@ -61,6 +61,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -127,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button btnChoose, btnUpload;
     public ImageView imageView;
     public Menu tempMenu;
-    //public StorageReference storageRef;
+    int i = 1;
+    public Uri downloadFilePath;
 
 
 
@@ -773,12 +775,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            //StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+
+            //Nummerke geven, maar zou eigenlijk laatst genomen nummer in database moete nemen en dan +1
+            StorageReference ref = storageReference.child("images/"+ i);
+            i++;
+            
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
+
+                            //Van hier is men probeersel
+                            UploadTask uploadTask = FirebaseStorage.getInstance().getReference().child("id").child("filename").putFile(downloadFilePath);
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+
+                                    // Continue with the task to get the download URL
+                                    return FirebaseStorage.getInstance().getReference().child("image").child(String.valueOf(i)).getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        Uri downloadUri = task.getResult();
+                                        FirebaseDatabase.getInstance().getReference().child(user.getUid())
+                                                .child(avatarName)
+                                                .child("avatar_image")
+                                                .setValue(downloadUri.toString());
+                                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Handle failures
+                                        // ...
+                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                            //Tot hier gaat het probeersel
+
+
                             Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
 
