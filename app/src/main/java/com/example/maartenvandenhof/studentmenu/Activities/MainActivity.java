@@ -3,6 +3,7 @@ package com.example.maartenvandenhof.studentmenu.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,6 +56,8 @@ import com.google.android.gms.tasks.Task;
 
 import org.w3c.dom.Text;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -265,31 +268,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Search Day Menu Button
-    public void searchDayMenu(View v){
+    public void searchDayMenu(View v) {
         SearchView priceSearch = findViewById(R.id.searchPriceField);
         String text = "Please fill in a number";
         ArrayList<Menu> menus = new ArrayList<>();
 
-        if (priceSearch.getQuery() != null){
+        if (priceSearch.getQuery() != null) {
             CharSequence query = priceSearch.getQuery();
             String temp = query.toString();
-            try{
+            try {
                 double price = Double.parseDouble(temp);
                 price = round(price, 2);
 
-                for (Menu mn:menuList){
-                    if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)){
+                for (Menu mn : menuList) {
+                    if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)) {
                         menus.add(mn);
                     }
                 }
                 allergiesList = new ArrayList<>();
 
-                int random = (int)(Math.random() * menus.size() + 0);
+                int random = (int) (Math.random() * menus.size() + 0);
                 Menu m = new Menu();
                 m = menus.get(random);
 
                 menuDescription(m.getName(), m.getDescription(), m.getRecipe(), m.getIngredientsString());
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
                 t.show();
             }
@@ -297,13 +300,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Sort Menus
-    public void sortPrice(View v){
+    public void sortPrice(View v) {
         sortedPriceList = new ArrayList<>();
         sortedPriceList = menuList;
         Collections.sort(sortedPriceList, PriceOrde);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PriceOrdendListFragment()).addToBackStack(null).commit();
-
 
 
     }
@@ -320,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    public void sortRating(View v)  {
+    public void sortRating(View v) {
         sortedList = new ArrayList<>();
         sortedList = menuList;
         Collections.sort(sortedList, MenuOrde);
@@ -711,7 +713,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Share Menu
-    public void shareButton(View v){
+    public void shareButton(View v) {
         TextView title = findViewById(R.id.menuDisplayTitle);
         TextView price = findViewById(R.id.menuDisplayPrice);
         TextView recipe = findViewById(R.id.recipeText);
@@ -730,6 +732,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
     //Google Maps
     public void getLastKnowLocation() {
         Log.d(TAG, "getLastKnowLocation: called.");
@@ -747,7 +751,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Location location = task.getResult();
                     GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "onComplete: latitude: " + geoPoint.getLat());
@@ -758,29 +762,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
-
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
-
 }
+
