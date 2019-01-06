@@ -88,11 +88,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public SharedPreferences sp;
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
-    private ArrayList<String> allergiesList;
+    public ArrayList<String> allergiesList;
     public FireBasReading reading;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
-    public ArrayList<String> allergiesList;
     public ArrayList<String> allergiesListWeek;
     public ArrayList<Menu> weekMenus;
     public FusedLocationProviderClient mFusedLocationClient;
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    /*private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -597,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     for (Menu m : menuList) {
                         if (m.getName().equals(menuTitel.getText().toString().trim())) {
-                            m.setIngredient(ingredientMenuList);
+                            m.setIngredients(ingredientMenuList);
                         }
                     }
                 }
@@ -621,6 +620,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Menu m : menuList) {
             if (m.getName().equals(menuTitle.getText().toString())) {
                 m.setRecipe(recipe.getText().toString());
+                myRef.child("menu").child("menu2").child("name").setValue(m.getName());
+                myRef.child("menu").child("menu2").child("ingredient").setValue(m.getIngredient());
+                myRef.child("menu").child("menu2").child("price").setValue(m.getPrice());
+                myRef.child("menu").child("menu2").child("rating").setValue(m.getRating());
+                myRef.child("menu").child("menu2").child("description").setValue(m.getDescription());
+                myRef.child("menu").child("menu2").child("recipe").setValue(m.getRecipe());
+
+
                 m1 = m;
             }
         }

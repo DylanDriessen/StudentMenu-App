@@ -123,6 +123,10 @@ public class Menu {
         this.ingedrientsDataBase = ingedrientsDataBase;
     }
 
+    public void setIngredients(ArrayList<Ingredient> list){
+        this.ingredients = list;
+    }
+
     public String getDescription() {
         return description;
     }
