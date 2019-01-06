@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
     public ArrayList<String> allergiesList;
-    public FireBasReading reading;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     public ArrayList<String> allergiesListWeek;
