@@ -279,7 +279,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                     catch(Exception e){
-                        Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".",Toast.LENGTH_LONG).show();
+                        if (!name.equals("update")){
+                            Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".",Toast.LENGTH_LONG).show();
+                        }
                         }
                         try{
                             String rating = d.child("rating").getValue().toString();
@@ -340,8 +342,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
 
-            //myRef.child("menu").child("update").child("name").setValue("update");
-            //myRef.child("menu").child("update").removeValue();
+            myRef.child("menu").child("update").child("name").setValue("update");
+            myRef.child("menu").child("update").removeValue();
             getSupportFragmentManager().popBackStack();
         }
     }
@@ -365,6 +367,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast notImplemented = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG);
         switch (menuItem.getItemId()) {
             case R.id.ml:
+                myRef.child("menu").child("update").child("name").setValue("update");
+                myRef.child("menu").child("update").removeValue();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).addToBackStack(null).commit();
                 break;
             case R.id.db:
