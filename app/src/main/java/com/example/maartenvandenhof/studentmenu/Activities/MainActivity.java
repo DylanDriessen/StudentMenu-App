@@ -737,11 +737,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 for(int i = 0; i < tempMenu.getIngredient().size(); i++){
                     try{
+
                         myRef.child("menu").child(tempMenu.getName()).child("ingredient").child(tempMenu.getIngredient().get(i).toString()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
+
+
                     } catch (Exception e){
                         
                     }
+
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("description").setValue(tempMenu.getIngredient().get(i).getName());
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("price").setValue(tempMenu.getIngredient().get(i).getPrice());
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("name").setValue(tempMenu.getIngredient().get(i).getName());
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
+
+
                 }
+
+
 
         if (recipe.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
