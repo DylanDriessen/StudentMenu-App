@@ -7,7 +7,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="320dp"
-        android:layout_height="360dp"
+        android:layout_height="370dp"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:background="#00aeff">
@@ -25,8 +25,8 @@
                 android:textSize="20sp"
                 android:textColor="#FFF"
                 android:textStyle="bold"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:background="@color/colorPrimary"/>
 
             <RelativeLayout
@@ -49,10 +49,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
                         android:gravity="center_horizontal"
-                        android:text="Allergies"
+                        android:text="Ingredient
+"
                         android:textColor="#00aeff"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/ingredientTitle"/>
                 </LinearLayout>
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="horizontal"
@@ -175,7 +177,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="30dp"
                 android:background="@color/colorPrimary"
-                android:onClick="addMenuIngredients"
+                android:onClick="addIngredientWithAllergies"
                 android:text="Add Ingerdient"
                 android:textColor="#FFF"
                 android:textSize="20sp"
