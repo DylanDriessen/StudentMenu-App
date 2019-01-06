@@ -60,13 +60,34 @@ public class WeekMenuListFragment extends Fragment {
                 menuList.add(menuListActivity.get(random));
             }
         } else {
-            double CountPrice = 0;
-            while (CountPrice < price) {
-                int random = (int)(Math.random() * (menuListActivity.size()) + 0);
-                Menu m = menuListActivity.get(random);
-                menuList.add(m);
-                CountPrice = CountPrice + m.getPrice();
+            if (menuListActivity.size() < 5){
+                ArrayList priceList = new ArrayList();
+                ArrayList<Menu> editedList = menuListActivity;
+                for (int i = menuListActivity.size(); i>=0;i--){
+                    int minIndex = editedList.indexOf(Collections.min(priceList));
+                    menuList.add(editedList.get(minIndex));
+                    editedList.remove(editedList.get(minIndex));
+                    priceList.remove(priceList.get(minIndex));
+                }
+                if (sum(menuList)>price){
+
+                } else {
+
+                }
+            } else {
+                ArrayList priceList = new ArrayList();
+                ArrayList<Menu> editedList = menuListActivity;
+                for (int  i = 0; i < 5; i++){
+                    int minIndex2 = editedList.indexOf(Collections.min(priceList));
+                    if (sum(menuList) < price){
+                        menuList.add(editedList.get(minIndex2));
+                        editedList.remove(editedList.get(minIndex2));
+                        priceList.remove(priceList.get(minIndex2));
+                    }
+                }
             }
+
+
         }
 
 
