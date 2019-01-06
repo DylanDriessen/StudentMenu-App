@@ -76,12 +76,12 @@
                 app:layout_constraintVertical_bias="0.18" />
 
             <Button
-                android:id="@+id/bUploadImage"
+                android:id="@+id/bSelectloadImage"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
                 android:background="@color/colorPrimary"
-                android:onClick="loadImagefromGallery"
+
                 android:text="select"
                 android:textColor="#FFF"
                 android:textSize="20sp"
