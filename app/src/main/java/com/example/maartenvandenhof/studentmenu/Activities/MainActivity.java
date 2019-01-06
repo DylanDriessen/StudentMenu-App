@@ -205,26 +205,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         allergiesList = new ArrayList<>();
         weekMenus = new ArrayList<>();
 
-        //Dummy menu's aanmaken
-        Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
-        Ingredient selder = new Ingredient("Selder", 1, "Kunt ge soep van maken.");
-        Ingredient patat = new Ingredient("Patat", 6, "Perfect voor puree.");
-        Ingredient sla = new Ingredient("Sla", 3, "Alleen voor konijnen.");
-
-        ArrayList<Ingredient> ingredients1 = new ArrayList<>();
-        ArrayList<Ingredient> ingredients2 = new ArrayList<>();
-        patat.addAllergy("Gluten");
-        selder.addAllergy("Celery");
-        ingredientList.add(wortel);
-        ingredientList.add(selder);
-        ingredientList.add(patat);
-        ingredientList.add(sla);
 
 
-        ingredients1.add(wortel);
-        ingredients1.add(patat);
-        ingredients2.add(sla);
-        ingredients2.add(selder);
+
 
 
 
@@ -550,6 +533,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Add Ingredient
     public void goToAddIngredient(View v) {
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoToAddIngredientFragment()).addToBackStack(null).commit();
     }
 
@@ -571,6 +556,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 for (Ingredient in : ingredientList) {
                     if (in.getName().equals(name.getText().toString().trim())) {
                         exists = true;
+
                     }
                 }
 
@@ -594,6 +580,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast t = Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT);
             t.show();
         }
+
+
+
     }
 
     public void addIngredientWithAllergies(View v) {
@@ -601,6 +590,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Ingredient i:ingredientList){
             if (i.getName().equals(title.getText().toString().trim())){
                 i.setAllergies(allergiesList);
+
+                myRef.child("ingedrients").child(i.getName()).child("description").setValue(i.getName());
+                myRef.child("ingedrients").child(i.getName()).child("price").setValue(i.getPrice());
+                myRef.child("ingedrients").child(i.getName()).child("name").setValue(i.getName());
+                myRef.child("ingedrients").child(i.getName()).child("allergies").setValue(i.getAllergies());
+
+
+
             }
         }
         allergiesList = new ArrayList<>();
