@@ -620,12 +620,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (Menu m : menuList) {
             if (m.getName().equals(menuTitle.getText().toString())) {
                 m.setRecipe(recipe.getText().toString());
-                myRef.child("menu").child("menu2").child("name").setValue(m.getName());
-                myRef.child("menu").child("menu2").child("ingredient").setValue(m.getIngredient());
-                myRef.child("menu").child("menu2").child("price").setValue(m.getPrice());
-                myRef.child("menu").child("menu2").child("rating").setValue(m.getRating());
-                myRef.child("menu").child("menu2").child("description").setValue(m.getDescription());
-                myRef.child("menu").child("menu2").child("recipe").setValue(m.getRecipe());
+                myRef.child("menu").child(m.getName()).child("name").setValue(m.getName());
+                myRef.child("menu").child(m.getName()).child("ingredient").setValue(m.getIngredient());
+                myRef.child("menu").child(m.getName()).child("price").setValue(m.getPrice());
+                myRef.child("menu").child(m.getName()).child("rating").setValue(m.getRating());
+                myRef.child("menu").child(m.getName()).child("description").setValue(m.getDescription());
+                myRef.child("menu").child(m.getName()).child("recipe").setValue(m.getRecipe());
 
 
                 m1 = m;
