@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.Adapter.MenuAdapter;
@@ -70,6 +71,11 @@ public class WeekMenuListFragment extends Fragment {
 
 
         //Assigning a menu for each day
+        if (!((MainActivity)getActivity()).weekMenus.isEmpty()){
+            menuList = ((MainActivity)getActivity()).weekMenus;
+        } else {
+            ((MainActivity)getActivity()).weekMenus = menuList;
+        }
         for (int i = 0; i <5; i++){
             ArrayList<Menu> singelList = new ArrayList<>();
             singelList.add(menuList.get(i));

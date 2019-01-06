@@ -1,9 +1,6 @@
 package com.example.maartenvandenhof.studentmenu.Activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -27,8 +23,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -36,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +60,8 @@ import com.google.android.gms.tasks.Task;
 
 import org.w3c.dom.Text;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -89,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> sortedPriceList;
     public ArrayList<String> allergiesList;
     public ArrayList<String> allergiesListWeek;
+    public ArrayList<Menu> weekMenus;
     public FusedLocationProviderClient mFusedLocationClient;
     public double lat;
     public double lon;
@@ -131,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuList = new ArrayList<>();
         ingredientList = new ArrayList<>();
         allergiesList = new ArrayList<>();
+        weekMenus = new ArrayList<>();
 
         //Dummy menu's aanmaken
         Ingredient wortel = new Ingredient("Wortel", 5, "Komt van onder de grond, is ne plant.");
@@ -169,11 +166,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getLastKnowLocation();
 
     }
-
-    /*public void showMap() {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }*/
 
     @Override
     public void onBackPressed() {
@@ -237,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String temp = query.toString();
             try {
                 double price = Double.parseDouble(temp);
+                price = round(price, 2);
                 MenuPriceSearchFragment fragment = new MenuPriceSearchFragment();
 
                 Bundle args = new Bundle();
@@ -256,12 +249,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void searchWeekMenu(View v) {
         SearchView priceSearch = findViewById(R.id.searchPriceField);
         String text = "Please fill in a number";
+        weekMenus = new ArrayList<>();
 
         if (priceSearch.getQuery() != null) {
             CharSequence query = priceSearch.getQuery();
             String temp = query.toString();
             try {
                 double price = Double.parseDouble(temp);
+                price = round(price, 2);
                 WeekMenuListFragment fragment = new WeekMenuListFragment();
 
                 Bundle args = new Bundle();
@@ -278,9 +273,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //Search Day Menu Button
+    public void searchDayMenu(View v) {
+        SearchView priceSearch = findViewById(R.id.searchPriceField);
+        String text = "Please fill in a number";
+        ArrayList<Menu> menus = new ArrayList<>();
 
+        if (priceSearch.getQuery() != null) {
+            CharSequence query = priceSearch.getQuery();
+            String temp = query.toString();
+            try {
+                double price = Double.parseDouble(temp);
+                price = round(price, 2);
+
+                for (Menu mn : menuList) {
+                    if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)) {
+                        menus.add(mn);
+                    }
+                }
+                allergiesList = new ArrayList<>();
+
+                int random = (int) (Math.random() * menus.size() + 0);
+                Menu m = new Menu();
+                m = menus.get(random);
+
+                menuDescription(m.getName(), m.getDescription(), m.getRecipe(), m.getIngredientsString());
+            } catch (NumberFormatException e) {
+                Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+                t.show();
+            }
+        }
+    }
+
+    //Sort Menus
     public void sortPrice(View v) {
-
         sortedPriceList = new ArrayList<>();
         sortedPriceList = menuList;
         Collections.sort(sortedPriceList, PriceOrde);
@@ -299,12 +325,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int menu1 = i;
             int menu2 = j;
             return menu2 - menu1;
-
         }
     };
 
     public void sortRating(View v) {
-
         sortedList = new ArrayList<>();
         sortedList = menuList;
         Collections.sort(sortedList, MenuOrde);
@@ -312,7 +336,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuOrdendListFragment()).addToBackStack(null).commit();
     }
 
-    //
     public static Comparator<Menu> MenuOrde = new Comparator<Menu>() {
         @Override
         public int compare(Menu o1, Menu o2) {
@@ -348,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!name.getText().toString().isEmpty() && !price.getText().toString().isEmpty() && !desc.getText().toString().isEmpty()) {
             try {
                 double priceDouble = Double.parseDouble(price.getText().toString());
+                priceDouble = round(priceDouble, 2);
 
                 //Make ingredient
                 Ingredient i = new Ingredient(name.getText().toString(), priceDouble, desc.getText().toString());
@@ -429,14 +453,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ArrayList<Ingredient> ingredientMenuList = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
-        ArrayList<Integer> priceList = new ArrayList<>();
+        ArrayList<Double> priceList = new ArrayList<>();
         ArrayList<ArrayList> allergyList = new ArrayList<>();
 
         if (ingredients.getChildAt(0) != null) {
             for (int i = 0; i < ingredients.getChildCount(); i++) {
                 if (ingredients.getChildAt(i) instanceof TextView) {
-                    priceList.add(Integer.parseInt(((TextView) ingredientsPrices.getChildAt(i)).getText().toString()));
+                    double price = Double.parseDouble(((TextView) ingredientsPrices.getChildAt(i)).getText().toString());
+                    price = round(price, 2);
+                    priceList.add(price);
+
                     names.add(((TextView) ingredients.getChildAt(i)).getText().toString());
+
                     LinearLayout al = (LinearLayout) allergies.getChildAt(i);
                     ArrayList<String> stringAl = new ArrayList<>();
                     for (int j = 0; j < al.getChildCount(); j++) {
@@ -690,6 +718,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //Share Menu
     public void shareButton(View v) {
         TextView title = findViewById(R.id.menuDisplayTitle);
         TextView price = findViewById(R.id.menuDisplayPrice);
@@ -702,6 +731,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
+    //Rounding method
+    private static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
     //Google Maps
     public void getLastKnowLocation() {
@@ -713,7 +750,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Location location = task.getResult();
                     GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "onComplete: latitude: " + geoPoint.getLat());
@@ -724,53 +761,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
-    /*public void moveCamera(){
-
-        double bottomBoundary = lat -.1;
-        double leftBoundary = lon - .1;
-        double topBoundary = lat + .1;
-        double rightBoundary = lon + .1;
-
-        mMapBoundary = new LatLngBounds(new LatLng(bottomBoundary, leftBoundary), new LatLng(topBoundary, rightBoundary));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 0));
-    }*/
-
-
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
-
-    public static void verifyStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }*/
 }
+

@@ -64,8 +64,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:background="#00aeff"
-                        android:onClick="searchMenuPrice"
-                        android:text="Search day"
+                        android:onClick="searchDayMenu"
+                        android:text="Day Menu"
                         android:textColor="@android:color/white"
                         android:layout_marginHorizontal="5dp"/>
                     <Button
@@ -74,7 +74,7 @@
                         android:layout_gravity="center_horizontal"
                         android:background="#00aeff"
                         android:onClick="searchWeekMenu"
-                        android:text="Search week"
+                        android:text="Week Menu"
                         android:textColor="@android:color/white"
                         android:layout_marginHorizontal="5dp"/>
                 </LinearLayout>
