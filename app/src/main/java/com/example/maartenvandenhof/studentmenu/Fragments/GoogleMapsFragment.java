@@ -162,4 +162,11 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback, 
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
 }
