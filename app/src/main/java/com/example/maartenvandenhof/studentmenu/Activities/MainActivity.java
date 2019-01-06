@@ -34,6 +34,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientAllergiesFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddIngredientFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuFragment;
 import com.example.maartenvandenhof.studentmenu.Fragments.GoToAddMenuIngredientFragment;
@@ -74,7 +75,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoToAddIngredientFragment()).addToBackStack(null).commit();
     }
 
-    public void addIngredient(View v) {
+    public void goToAllergiesTab(View v){
         EditText name = findViewById(R.id.addIngredientName);
         EditText price = findViewById(R.id.addIngredientPrice);
         EditText desc = findViewById(R.id.addIngredientDescription);
@@ -517,7 +517,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Add Ingredient
                 if (!exists) {
                     ingredientList.add(i);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).addToBackStack(null).commit();
+                    Bundle args = new Bundle();
+                    args.putString("ingredientTitle", i.getName());
+                    GoToAddIngredientAllergiesFragment fragment = new GoToAddIngredientAllergiesFragment();
+                    fragment.setArguments(args);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 } else {
                     Toast t = Toast.makeText(this, "Ingredient already exists", Toast.LENGTH_SHORT);
                     t.show();
@@ -530,8 +534,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast t = Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT);
             t.show();
         }
+    }
 
-
+    public void addIngredientWithAllergies(View v) {
+        TextView title = findViewById(R.id.ingredientTitle);
+        for (Ingredient i:ingredientList){
+            if (i.getName().equals(title.getText().toString().trim())){
+                i.setAllergies(allergiesList);
+            }
+        }
+        allergiesList = new ArrayList<>();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
     }
 
     //Add Menu

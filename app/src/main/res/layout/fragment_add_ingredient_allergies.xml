@@ -7,8 +7,8 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="320dp"
-        android:layout_height="490dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="370dp"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:background="#00aeff">
 
@@ -22,14 +22,17 @@
                 android:layout_height="wrap_content"
                 android:text="Select allergies"
                 android:textAlignment="center"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="#FFF"
                 android:textStyle="bold"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:background="@color/colorPrimary"/>
 
             <RelativeLayout
                 android:layout_width="300dp"
                 android:layout_height="180dp"
+                android:layout_marginTop="30dp"
                 android:background="#FFF">
 
                 <LinearLayout
@@ -46,10 +49,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
                         android:gravity="center_horizontal"
-                        android:text="Allergies"
+                        android:text="Ingredient
+"
                         android:textColor="#00aeff"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/ingredientTitle"/>
                 </LinearLayout>
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="horizontal"
@@ -167,6 +172,16 @@
                         android:onClick="onCheckboxClicked"/>
                 </LinearLayout>
             </RelativeLayout>
+            <Button
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:onClick="addIngredientWithAllergies"
+                android:text="Add Ingerdient"
+                android:textColor="#FFF"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

@@ -61,12 +61,8 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
 
         mMapBoundary = new LatLngBounds(new LatLng(bottomBoundary, leftBoundary), new LatLng(topBoundary, rightBoundary));
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 0));
-
-        //((MainActivity)getActivity()).getLastKnowLocation();
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(((MainActivity)getActivity()).lat, ((MainActivity)getActivity()).lon);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //((MainActivity)getActivity()).moveCamera();
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng yLocation = new LatLng(((MainActivity)getActivity()).lat, ((MainActivity)getActivity()).lon);
+        mMap.addMarker(new MarkerOptions().position(yLocation).title("Your location"));
     }
 }

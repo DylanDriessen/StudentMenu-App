@@ -50,7 +50,8 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:background="@drawable/back"
-                    android:tooltipText="Budget"/>
+                    android:tooltipText="Budget"
+                    android:maxLength="50"/>
 
 
                 <LinearLayout
