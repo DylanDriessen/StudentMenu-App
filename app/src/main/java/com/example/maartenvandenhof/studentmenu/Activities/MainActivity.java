@@ -959,11 +959,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onComplete(@NonNull Task<Location> task) {
                 if (task.isSuccessful()) {
                     Location location = task.getResult();
-                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                    GeoPoint geoPoint = new GeoPoint();
+                    if(location!=null){
+                        geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                        lat = location.getLatitude();
+                        lon = location.getLongitude();
+                    }else{
+                        geoPoint = new GeoPoint(50,50);
+                        lat = 50;
+                        lon = 50;
+                    }
                     Log.d(TAG, "onComplete: latitude: " + geoPoint.getLat());
                     Log.d(TAG, "onComplete: longtitude: " + geoPoint.getLon());
-                    lat = location.getLatitude();
-                    lon = location.getLongitude();
+
                 }
             }
         });
