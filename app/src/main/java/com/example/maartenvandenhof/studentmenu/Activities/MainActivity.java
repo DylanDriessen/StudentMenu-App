@@ -176,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG,database.toString());
-
                 showData(dataSnapshot);
 
             }
@@ -253,11 +252,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
+        ingredientList = new ArrayList<>();
         menuList = new ArrayList<>();
-        for(DataSnapshot ds: snapshot.getChildren()) {
-            for (DataSnapshot d : ds.getChildren()) {
-                if(d != null){
+        for(DataSnapshot d: snapshot.child("menu").getChildren()) {
+            Log.d(TAG,snapshot.child("menu").toString());
+
+
+            if(d != null){
                     Menu menu = new Menu();
 
                     String name = (String) d.child("name").getValue();
@@ -278,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                     catch(Exception e){
-                        Toast.makeText(this, "Prijs mag niet 0 zijn",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".",Toast.LENGTH_LONG).show();
                         }
                         try{
                             String rating = d.child("rating").getValue().toString();
@@ -299,11 +300,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+                 }
+
                 }
 
+
+
+                for(DataSnapshot ds: snapshot.child("ingedrients").getChildren()) {
+                    if (ds != null) {
+
+                        Ingredient ingredient = new Ingredient();
+                        String description = (String) ds.child("description").getValue();
+                        String name = (String) ds.child("name").getValue();
+                        try {
+                            String price = ds.child("price").getValue().toString();
+                            ingredient.setPrice(Double.parseDouble(price));
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".", Toast.LENGTH_LONG).show();
+
+                        }
+
+                        ingredient.setName(name);
+                        ingredient.setDescription(description);
+
+                        ingredientList.add(ingredient);
+
+                    }
+                }
             }
-        }
-    }
+
 
 
 
