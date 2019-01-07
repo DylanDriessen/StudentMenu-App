@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     catch(Exception e){
                         if (!name.equals("update")){
-                            Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".",Toast.LENGTH_LONG).show();
+                            //Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".",Toast.LENGTH_LONG).show();
                         }
                         }
                         try{
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String price = ds.child("price").getValue().toString();
                             ingredient.setPrice(Double.parseDouble(price));
                         } catch (Exception e) {
-                            Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(this, "Fout bij het ophalen in de database bij " + name + ".", Toast.LENGTH_LONG).show();
 
                         }
 
