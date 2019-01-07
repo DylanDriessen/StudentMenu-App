@@ -259,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
 
                         Ingredient ing = new Ingredient(nameIngredient,Double.parseDouble(price));
+                        ing.setAllergies(allergies);
                         ingredients.add(ing);
                     }
 
@@ -478,11 +479,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 allergiesList = new ArrayList<>();
 
-                int random = (int) (Math.random() * menus.size() + 0);
-                Menu m = new Menu();
-                m = menus.get(random);
+                if (menus.size() == 0){
+                    Toast.makeText(this, "No menus found", Toast.LENGTH_SHORT).show();
+                } else {
+                    int random = (int) (Math.random() * menus.size() + 0);
+                    Menu m = new Menu();
+                    m = menus.get(random);
 
-                menuDescription(m.getName(), m.getDescription(), m.getRecipe(), m.getIngredientsString());
+                    menuDescription(m.getName(), m.getDescription(), m.getRecipe(), m.getIngredientsString());
+                }
             } catch (NumberFormatException e) {
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
                 t.show();
