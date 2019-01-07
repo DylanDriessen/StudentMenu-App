@@ -128,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button btnChoose, btnUpload;
     public ImageView imageView;
     public Menu tempMenu;
+    int i = 1;
+    public Uri downloadFilePath;
 
 
 
@@ -369,12 +371,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //showMap();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoogleMapsFragment()).addToBackStack(null).commit();
                 break;
-            /*case R.id.sMenu:
+            case R.id.sMenu:
                 notImplemented.show();
                 break;
             case R.id.sIngredient:
                 notImplemented.show();
-                break;*/
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -470,16 +472,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 double price = Double.parseDouble(temp);
                 price = round(price, 2);
 
-                if (price <= 0){
-                    Toast.makeText(this, "Your budget is too small", Toast.LENGTH_SHORT).show();
-                }else {
-
-                    for (Menu mn : menuList) {
-                        if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)) {
-                            menus.add(mn);
-                        }
+                for (Menu mn : menuList) {
+                    if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)) {
+                        menus.add(mn);
                     }
-                    allergiesList = new ArrayList<>();
+                }
+                allergiesList = new ArrayList<>();
 
                 if (menus.size() == 0){
                     Toast.makeText(this, "No menus found", Toast.LENGTH_SHORT).show();
@@ -746,11 +744,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 for(int i = 0; i < tempMenu.getIngredient().size(); i++){
                     try{
+
                         myRef.child("menu").child(tempMenu.getName()).child("ingredient").child(tempMenu.getIngredient().get(i).toString()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
+
+
                     } catch (Exception e){
 
                     }
+
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("description").setValue(tempMenu.getIngredient().get(i).getName());
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("price").setValue(tempMenu.getIngredient().get(i).getPrice());
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("name").setValue(tempMenu.getIngredient().get(i).getName());
+                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
+
+
                 }
+
+
 
         if (recipe.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
@@ -782,13 +792,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
-            
+            //StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+
+            //Nummerke geven, maar zou eigenlijk laatst genomen nummer in database moete nemen en dan +1
+            StorageReference ref = storageReference.child("images/"+ i);
+            i++;
+
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
+
+                            //Van hier is men probeersel
+                            UploadTask uploadTask = FirebaseStorage.getInstance().getReference().child("id").child("filename").putFile(downloadFilePath);
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+
+                                    // Continue with the task to get the download URL
+                                    return FirebaseStorage.getInstance().getReference().child("image").child(String.valueOf(i)).getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        Uri downloadUri = task.getResult();
+                                        FirebaseDatabase.getInstance().getReference().child(user.getUid())
+                                                .child(avatarName)
+                                                .child("avatar_image")
+                                                .setValue(downloadUri.toString());
+                                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Handle failures
+                                        // ...
+                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                            //Tot hier gaat het probeersel
+
 
                             Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
