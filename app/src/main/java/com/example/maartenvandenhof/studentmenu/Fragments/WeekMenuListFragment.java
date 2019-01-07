@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import java.util.zip.CheckedOutputStream;
 
 
 public class WeekMenuListFragment extends Fragment {
+
+    private static final String TAG = "DITISEENTEST";
 
     @Nullable
     @Override
@@ -62,11 +65,15 @@ public class WeekMenuListFragment extends Fragment {
                 menuList.add(menuListActivity.get(random));
             }
         } else {
+            ArrayList<Double> priceList = new ArrayList();
+
+            for (Menu m : menuListActivity){
+                priceList.add(m.getPrice());
+            }
             if (menuListActivity.size() < 5){
-                ArrayList priceList = new ArrayList();
                 ArrayList<Menu> editedList = menuListActivity;
                 for (int i = menuListActivity.size(); i>=0;i--){
-                    int minIndex = editedList.indexOf(Collections.min(priceList));
+                    int minIndex = priceList.indexOf(Collections.min(priceList));
                     menuList.add(editedList.get(minIndex));
                     editedList.remove(editedList.get(minIndex));
                     priceList.remove(priceList.get(minIndex));
@@ -77,11 +84,12 @@ public class WeekMenuListFragment extends Fragment {
 
                 }
             } else {
-                ArrayList priceList = new ArrayList();
                 ArrayList<Menu> editedList = menuListActivity;
                 for (int  i = 0; i < 5; i++){
-                    int minIndex2 = editedList.indexOf(Collections.min(priceList));
-                    if (sum(menuList) < price){
+                    if (sum(menuList) < price && editedList.size() != 0){
+                        Log.d(TAG, "TEST: " + Collections.min(priceList));
+                        Log.d(TAG, "TEST: " + editedList.indexOf(Collections.min(priceList)));
+                        int minIndex2 = priceList.indexOf(Collections.min(priceList));
                         menuList.add(editedList.get(minIndex2));
                         editedList.remove(editedList.get(minIndex2));
                         priceList.remove(priceList.get(minIndex2));

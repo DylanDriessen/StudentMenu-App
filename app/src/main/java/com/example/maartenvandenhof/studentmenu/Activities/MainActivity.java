@@ -102,10 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<Menu> menuList;
     public ArrayList<Ingredient> ingredientList;
     public RatingBar ratingBar;
-    public ImageView imageToUpLoad;
-    public Button bUploadImage;
-    public String mFilePath;
-    public String imgpath, storedpath;
     public SharedPreferences sp;
     public ArrayList<Menu> sortedList;
     public ArrayList<Menu> sortedPriceList;
@@ -117,20 +113,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public FusedLocationProviderClient mFusedLocationClient;
     public double lat;
     public double lon;
-    public GoogleMap mGoogleMap;
-    public LatLngBounds mMapBoundary;
-    public EditText mSearchText;
-    public StorageReference referenceStorage;
     public FirebaseStorage storage;
     public StorageReference storageReference;
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
-    private Button btnChoose, btnUpload;
     public ImageView imageView;
     public Menu tempMenu;
     int i = 1;
-    public Uri downloadFilePath;
-
 
 
 
