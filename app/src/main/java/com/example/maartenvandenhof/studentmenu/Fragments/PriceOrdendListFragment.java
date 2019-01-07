@@ -31,6 +31,8 @@ public class PriceOrdendListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
         RecyclerView lv = (RecyclerView)view.findViewById(R.id.menuList);
 
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Orderd on price");
+
         adapter = new MenuAdapter(getContext(), ((MainActivity)getActivity()).sortedPriceList);
         lv.setAdapter(adapter);
         lv.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -30,7 +30,7 @@ public class MenuOrdendListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
         RecyclerView lv = (RecyclerView)view.findViewById(R.id.menuList);
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Ordered on rating");
         adapter = new MenuAdapter(getContext(), ((MainActivity)getActivity()).sortedList);
         lv.setAdapter(adapter);
         lv.setLayoutManager(new LinearLayoutManager(getContext()));

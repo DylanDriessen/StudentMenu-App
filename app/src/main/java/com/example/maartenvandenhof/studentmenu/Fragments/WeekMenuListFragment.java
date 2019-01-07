@@ -40,6 +40,8 @@ public class WeekMenuListFragment extends Fragment {
         views.add((RecyclerView)view.findViewById(R.id.day4));
         views.add((RecyclerView)view.findViewById(R.id.day5));
 
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Week Suggestions");
+
         //Allergies
         ArrayList<String> allergies = ((MainActivity) getActivity()).allergiesListWeek;
         ArrayList<Menu> adjustedList = new ArrayList<>();

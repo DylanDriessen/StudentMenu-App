@@ -35,7 +35,7 @@ public class MenuPriceSearchFragment extends Fragment {
         ArrayList<String> allergies = ((MainActivity) getActivity()).allergiesList;
         ArrayList<Menu> adjustedList = new ArrayList<>();
         double price = getArguments().getDouble("price");
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("All Menus under " + price);
         for (Menu m : menuList){
             if(m.getPrice() <= price && Collections.disjoint(m.getAllergies(), allergies)){
                 adjustedList.add(m);

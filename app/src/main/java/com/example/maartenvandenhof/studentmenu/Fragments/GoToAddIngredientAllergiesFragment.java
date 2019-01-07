@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.R;
 
 public class GoToAddIngredientAllergiesFragment extends Fragment {
@@ -19,6 +20,7 @@ public class GoToAddIngredientAllergiesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_ingredient_allergies, container, false);
         TextView title = v.findViewById(R.id.ingredientTitle);
         title.setText(getArguments().getString("ingredientTitle"));
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add ingredient");
         return v;
     }
 }

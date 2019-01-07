@@ -26,6 +26,7 @@ public class GoToAddMenuFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add Menu");
         View v = inflater.inflate(R.layout.fragment_add_menu, container, false);
 
         return v;

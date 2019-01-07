@@ -22,7 +22,7 @@ public class IngredientListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
         RecyclerView lv = (RecyclerView)view.findViewById(R.id.ingredientList);
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Ingredient List");
         IngredientAdapter adapter = new IngredientAdapter(getContext(), ((MainActivity)getActivity()).ingredientList);
         lv.setAdapter(adapter);
         lv.setLayoutManager(new LinearLayoutManager(getContext()));

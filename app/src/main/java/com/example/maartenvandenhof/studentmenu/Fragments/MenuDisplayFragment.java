@@ -33,7 +33,7 @@ public class MenuDisplayFragment extends Fragment {
         TextView recipe = view.findViewById(R.id.recipeText);
         //ImageView image = view.findViewById(R.id.backgroundPicture);
         RecyclerView ingredientList = view.findViewById(R.id.menuIngredientRecycler);
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Have fun cooking!");
         String menuTitle = (String)getArguments().get("MenuTitle");
         String menuPrice = (String)getArguments().get("MenuPrice");
         String menuRecipe = (String)getArguments().get("MenuRecipe");

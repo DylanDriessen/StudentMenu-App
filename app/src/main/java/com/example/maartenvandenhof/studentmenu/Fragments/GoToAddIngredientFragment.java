@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.R;
 
 public class GoToAddIngredientFragment extends Fragment {
@@ -15,6 +16,7 @@ public class GoToAddIngredientFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add Ingredient");
         return inflater.inflate(R.layout.fragment_add_ingredient, container, false);
     }
 }

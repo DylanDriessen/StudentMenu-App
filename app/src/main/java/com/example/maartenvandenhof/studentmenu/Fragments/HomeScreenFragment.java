@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.maartenvandenhof.studentmenu.Activities.MainActivity;
 import com.example.maartenvandenhof.studentmenu.R;
 
 public class HomeScreenFragment extends Fragment {
@@ -15,6 +16,7 @@ public class HomeScreenFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Home");
         return inflater.inflate(R.layout.fragment_home_screen, container, false);
     }
 }

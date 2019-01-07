@@ -69,7 +69,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback, 
         mSearchText = (AutoCompleteTextView) v.findViewById(R.id.input_search);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Local Stores");
         mSearchText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
