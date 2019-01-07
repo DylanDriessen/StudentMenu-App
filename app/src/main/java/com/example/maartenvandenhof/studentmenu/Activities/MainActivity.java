@@ -371,12 +371,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //showMap();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GoogleMapsFragment()).addToBackStack(null).commit();
                 break;
-            case R.id.sMenu:
+            /*case R.id.sMenu:
                 notImplemented.show();
                 break;
             case R.id.sIngredient:
                 notImplemented.show();
-                break;
+                break;*/
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -792,50 +792,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            //StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
-
-            //Nummerke geven, maar zou eigenlijk laatst genomen nummer in database moete nemen en dan +1
-            StorageReference ref = storageReference.child("images/"+ i);
-            i++;
+            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
 
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-
-                            //Van hier is men probeersel
-                            UploadTask uploadTask = FirebaseStorage.getInstance().getReference().child("id").child("filename").putFile(downloadFilePath);
-                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                                @Override
-                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                    if (!task.isSuccessful()) {
-                                        throw task.getException();
-                                    }
-
-                                    // Continue with the task to get the download URL
-                                    return FirebaseStorage.getInstance().getReference().child("image").child(String.valueOf(i)).getDownloadUrl();
-                                }
-                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        Uri downloadUri = task.getResult();
-                                        FirebaseDatabase.getInstance().getReference().child(user.getUid())
-                                                .child(avatarName)
-                                                .child("avatar_image")
-                                                .setValue(downloadUri.toString());
-                                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        // Handle failures
-                                        // ...
-                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-
-                            //Tot hier gaat het probeersel
-
 
                             Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuListFragment()).commit();
