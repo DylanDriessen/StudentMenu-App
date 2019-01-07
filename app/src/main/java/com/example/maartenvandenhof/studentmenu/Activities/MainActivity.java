@@ -469,18 +469,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 double price = Double.parseDouble(temp);
                 price = round(price, 2);
 
-                for (Menu mn : menuList) {
-                    if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)) {
-                        menus.add(mn);
+                if (price <= 0){
+                    Toast.makeText(this, "Your budget is too small", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    for (Menu mn : menuList) {
+                        if (mn.getPrice() <= price && Collections.disjoint(mn.getAllergies(), allergiesList)) {
+                            menus.add(mn);
+                        }
                     }
+                    allergiesList = new ArrayList<>();
+
+                    int random = (int) (Math.random() * menus.size() + 0);
+                    Menu m = new Menu();
+                    m = menus.get(random);
+
+                    menuDescription(m.getName(), m.getDescription(), m.getRecipe(), m.getIngredientsString());
                 }
-                allergiesList = new ArrayList<>();
-
-                int random = (int) (Math.random() * menus.size() + 0);
-                Menu m = new Menu();
-                m = menus.get(random);
-
-                menuDescription(m.getName(), m.getDescription(), m.getRecipe(), m.getIngredientsString());
             } catch (NumberFormatException e) {
                 Toast t = Toast.makeText(this, text, Toast.LENGTH_SHORT);
                 t.show();
