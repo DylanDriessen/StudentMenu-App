@@ -604,19 +604,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void addIngredientWithAllergies(View v) {
         TextView title = findViewById(R.id.ingredientTitle);
-        for (Ingredient i:ingredientList){
-            if (i.getName().equals(title.getText().toString().trim())){
-                i.setAllergies(allergiesList);
+       try{
+           for (Ingredient i:ingredientList){
+               if (i.getName().equals(title.getText().toString().trim())){
+                   i.setAllergies(allergiesList);
 
-                myRef.child("ingedrients").child(i.getName()).child("description").setValue(i.getName());
-                myRef.child("ingedrients").child(i.getName()).child("price").setValue(i.getPrice());
-                myRef.child("ingedrients").child(i.getName()).child("name").setValue(i.getName());
-                myRef.child("ingedrients").child(i.getName()).child("allergies").setValue(i.getAllergies());
+                   myRef.child("ingedrients").child(i.getName()).child("description").setValue(i.getName());
+                   myRef.child("ingedrients").child(i.getName()).child("price").setValue(i.getPrice());
+                   myRef.child("ingedrients").child(i.getName()).child("name").setValue(i.getName());
+                   myRef.child("ingedrients").child(i.getName()).child("allergies").setValue(i.getAllergies());
 
 
 
-            }
-        }
+               }
+           }
+       } catch (Exception d){
+
+       }
         allergiesList = new ArrayList<>();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IngredientListFragment()).commit();
     }
@@ -732,36 +736,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         EditText recipe = findViewById(R.id.addMenuRecipe);
         TextView menuTitle = findViewById(R.id.addMenuTitle);
         Menu m1 = tempMenu;
-        menuList.add(tempMenu);
-                tempMenu.setRecipe(recipe.getText().toString());
-                myRef.child("menu").child(tempMenu.getName()).child("name").setValue(tempMenu.getName());
-                myRef.child("menu").child(tempMenu.getName()).child("ingredient").setValue(tempMenu.getIngredient());
-                myRef.child("menu").child(tempMenu.getName()).child("price").setValue(tempMenu.getPrice());
-                myRef.child("menu").child(tempMenu.getName()).child("rating").setValue(tempMenu.getRating());
-                myRef.child("menu").child(tempMenu.getName()).child("description").setValue(tempMenu.getDescription());
-                myRef.child("menu").child(tempMenu.getName()).child("recipe").setValue(tempMenu.getRecipe());
+        try {
+            menuList.add(tempMenu);
+            tempMenu.setRecipe(recipe.getText().toString());
+            myRef.child("menu").child(tempMenu.getName()).child("name").setValue(tempMenu.getName());
+            myRef.child("menu").child(tempMenu.getName()).child("ingredient").setValue(tempMenu.getIngredient());
+            myRef.child("menu").child(tempMenu.getName()).child("price").setValue(tempMenu.getPrice());
+            myRef.child("menu").child(tempMenu.getName()).child("rating").setValue(tempMenu.getRating());
+            myRef.child("menu").child(tempMenu.getName()).child("description").setValue(tempMenu.getDescription());
+            myRef.child("menu").child(tempMenu.getName()).child("recipe").setValue(tempMenu.getRecipe());
 
 
-                for(int i = 0; i < tempMenu.getIngredient().size(); i++){
-                    try{
+            for(int i = 0; i < tempMenu.getIngredient().size(); i++){
+                try{
 
-                        myRef.child("menu").child(tempMenu.getName()).child("ingredient").child(tempMenu.getIngredient().get(i).toString()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
+                    myRef.child("menu").child(tempMenu.getName()).child("ingredient").child(tempMenu.getIngredient().get(i).toString()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
 
 
-                    } catch (Exception e){
-
-                    }
-
-                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("description").setValue(tempMenu.getIngredient().get(i).getName());
-                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("price").setValue(tempMenu.getIngredient().get(i).getPrice());
-                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("name").setValue(tempMenu.getIngredient().get(i).getName());
-                    myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
-
+                } catch (Exception e){
 
                 }
 
+                myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("description").setValue(tempMenu.getIngredient().get(i).getName());
+                myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("price").setValue(tempMenu.getIngredient().get(i).getPrice());
+                myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("name").setValue(tempMenu.getIngredient().get(i).getName());
+                myRef.child("ingedrients").child(tempMenu.getIngredient().get(i).getName()).child("allergies").setValue(tempMenu.getIngredient().get(i).getAllergies());
 
 
+            }
+
+
+
+        } catch (Exception e){
+
+        }
         if (recipe.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in a Recipy", Toast.LENGTH_LONG).show();
         } else {
