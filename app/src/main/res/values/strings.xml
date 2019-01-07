@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudentMenu</string>
+    <string name="app_name">Student Menu</string>
     <string name="action_settings">Settings</string>
     <string name="test">Test</string>
     <string name="menu_search">Menu Search</string>
